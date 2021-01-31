@@ -117,12 +117,13 @@ my_cir_plot <- function(geneid, alia_name = NULL) {
 my_tissue_explot <- function(st) {
   tryCatch(
     error = function(cnd) {
-      str_c("no data available! ", st)
+      str_c("No data available! ", st)
     },
     {
       temp <-
         iso_exp_tpm %>% filter(str_detect(tracking_id, st)) %>% column_to_rownames(var = "tracking_id") %>%
         mutate("leaf_0_" = leaf_0) %>% select(!leaf_0)
+      if(nrow(temp)>0){temp <- temp[1,]}
       df <-
         tibble(
           "samples" = factor(names(temp), levels = names(temp)),
@@ -146,11 +147,12 @@ my_tissue_explot <- function(st) {
 my_prot_plot <- function(st) {
   tryCatch(
     error = function(cnd) {
-      str_c("no data available! ", st)
+      str_c("No data available! ", st)
     },
     
     {
       df <- AD_pro_19920 %>% filter(str_detect(tracking_id, st))
+      if(nrow(df)>0){df <- df[1,]}
       df_pl <-
         tibble(
           samples = factor(
@@ -202,12 +204,12 @@ ui <- fluidPage(
   # Application title
   titlePanel("Circadian rhythm plot generator"),
   
-  # Sidebar with a slider input for number of bins
+
   sidebarLayout(
     sidebarPanel(
       helpText(
         "Input a gene ID, e.g",
-        em("Ghir_D11G029140"),
+        em("Ghir_D11G029140, Ghir_D11G029140.1"),
         br(),
         'click plot for expression, ',
         'GO information and homologs founded in TAIR10 '
@@ -227,12 +229,12 @@ ui <- fluidPage(
         "plots",
         h4("circadian rhythm, gene expression level"),
         plotOutput("circa_plot"),
-        h4("expression level of gene in different tissues"),
+        h4("expression level of isoform in different tissues"),
         plotOutput("tissue_plot"),
-        textOutput("tissue_err"),
+        textOutput("tissue_err", container = h1),
         h4("different expression level of protein between FL and WT"),
         plotOutput("prot_plot"),
-        textOutput("prot_err")
+        textOutput("prot_err", container = h1)
       ),
       tabPanel(
         "tables",
@@ -251,23 +253,45 @@ ui <- fluidPage(
 server <- function(input, output) {
   require(DT)
   
+  # default
+  output$circa_plot <- renderPlot(my_cir_plot("Ghir_D11G029140"))
+  output$tissue_plot <- renderPlot(my_tissue_explot("Ghir_D11G029140"))
+  output$prot_plot <- renderPlot(my_prot_plot("Ghir_D11G029140"))
+  output$go <- DT::renderDataTable(my_go_table("Ghir_D11G029140"))
+  output$homo_ara <-
+    DT::renderDataTable(expr = datatable((my_ara_homo_tbl("Ghir_D11G029140")%>%
+                                            mutate(Match = map(Match,  ~ as.character(a(
+                                              href = str_c(
+                                                "https://www.arabidopsis.org/servlets/TairObject?type=locus&name=",
+                                                str_match(.x, "(^.*)\\.")[, 2]
+                                              ),
+                                              target = "_blank",
+                                              .x
+                                            ))))), escape = FALSE))
+  
   observeEvent(input$plot,
-               {
-                 cir_plot <- my_cir_plot(input$geneid)
+               {if(!str_detect(input$geneid, "^Ghir_\\w\\d{2}G\\d{6}$|^Ghir_\\w\\d{2}G\\d{6}\\.\\d$")){
+                 showNotification("Invalid input id!", type = "error")
+               }else{
+                 cir_plot <- my_cir_plot(str_extract(input$geneid, "^Ghir_\\w\\d{2}G\\d{6}"))
                  output$circa_plot <- renderPlot(cir_plot)
                  
                  tissue_plot <- my_tissue_explot(input$geneid)
                  if (is_character(tissue_plot)) {
-                   output$tissue_err <- renderText(h1(tissue_plot))
+                   output$tissue_err <- renderText(tissue_plot)
+                   output$tissue_plot <- renderPlot(NULL)
                  } else{
                    output$tissue_plot <- renderPlot(tissue_plot)
+                   output$tissue_err <- renderText(NULL)
                  }
                  
                  prot_plot <- my_prot_plot(input$geneid)
                  if (is_character(prot_plot)) {
-                   output$prot_err <- renderText(h1(prot_plot))
+                   output$prot_err <- renderText(prot_plot)
+                   output$prot_plot <- renderPlot(NULL)
                  } else{
                    output$prot_plot <- renderPlot(prot_plot)
+                   output$prot_err <- renderText(NULL)
                  }
                  
                  go_table <- my_go_table(input$geneid)
@@ -286,7 +310,7 @@ server <- function(input, output) {
                    ))))
                  output$homo_ara <-
                    DT::renderDataTable(expr = datatable(df, escape = FALSE))
-               })
+               }})
   
   # Downloadable csv of selected dataset ----
   output$downloadfig <- downloadHandler(
