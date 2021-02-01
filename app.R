@@ -114,7 +114,7 @@ my_cir_plot <- function(geneid, alia_name = NULL) {
   
 }
 
-my_tissue_explot <- function(st) {
+my_tissue_plot <- function(st) {
   tryCatch(
     error = function(cnd) {
       str_c("No data available! ", st)
@@ -123,7 +123,11 @@ my_tissue_explot <- function(st) {
       temp <-
         iso_exp_tpm %>% filter(str_detect(tracking_id, st)) %>% column_to_rownames(var = "tracking_id") %>%
         mutate("leaf_0_" = leaf_0) %>% select(!leaf_0)
-      if(nrow(temp)>0){temp <- temp[1,]}
+      if(nrow(temp)>0){
+        temp <- temp[1,]
+      }else{
+          stop("No data available!")
+        }
       df <-
         tibble(
           "samples" = factor(names(temp), levels = names(temp)),
@@ -190,7 +194,8 @@ my_ara_homo_tbl <- function(str) {
   str_homo <-
     blastp_AD1_HAU_v1_0_vs_arabidopsis_1 %>% filter(str_detect(Query, pattern = str))
   if (nrow(str_homo) == 0)
-    return("No homolog in tair10")
+    map_dfr(str_homo, function(x)
+      x <- "No homolog in tair10")
   else
     return(str_homo)
 }
@@ -255,7 +260,7 @@ server <- function(input, output) {
   
   # default
   output$circa_plot <- renderPlot(my_cir_plot("Ghir_D11G029140"))
-  output$tissue_plot <- renderPlot(my_tissue_explot("Ghir_D11G029140"))
+  output$tissue_plot <- renderPlot(my_tissue_plot("Ghir_D11G029140"))
   output$prot_plot <- renderPlot(my_prot_plot("Ghir_D11G029140"))
   output$go <- DT::renderDataTable(my_go_table("Ghir_D11G029140"))
   output$homo_ara <-
@@ -276,7 +281,7 @@ server <- function(input, output) {
                  cir_plot <- my_cir_plot(str_extract(input$geneid, "^Ghir_\\w\\d{2}G\\d{6}"))
                  output$circa_plot <- renderPlot(cir_plot)
                  
-                 tissue_plot <- my_tissue_explot(input$geneid)
+                 tissue_plot <- my_tissue_plot(input$geneid)
                  if (is_character(tissue_plot)) {
                    output$tissue_err <- renderText(tissue_plot)
                    output$tissue_plot <- renderPlot(NULL)
@@ -298,7 +303,7 @@ server <- function(input, output) {
                  output$go <- DT::renderDataTable(go_table)
                  
                  df <- my_ara_homo_tbl(input$geneid)
-                 if (!is.null(df$Match))
+                 if (!is_character(df))
                    df <- df %>%
                    mutate(Match = map(Match,  ~ as.character(a(
                      href = str_c(
