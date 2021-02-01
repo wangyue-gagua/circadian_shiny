@@ -1,6 +1,7 @@
 
 
 library(shiny)
+library(shinyjs)
 library(tidyverse)
 library(readxl)
 library(shinythemes)
@@ -117,7 +118,7 @@ my_cir_plot <- function(geneid, alia_name = NULL) {
 my_tissue_plot <- function(st) {
   tryCatch(
     error = function(cnd) {
-      str_c("No data available! ", st)
+      str_c("No RNA-seq data available! ", st)
     },
     {
       temp <-
@@ -151,7 +152,7 @@ my_tissue_plot <- function(st) {
 my_prot_plot <- function(st) {
   tryCatch(
     error = function(cnd) {
-      str_c("No data available! ", st)
+      str_c("No MS data available! ", st)
     },
     
     {
@@ -205,53 +206,62 @@ my_ara_homo_tbl <- function(str) {
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  theme = shinytheme("simplex"),
-  # Application title
-  titlePanel("Circadian rhythm plot generator"),
-  
-
-  sidebarLayout(
-    sidebarPanel(
-      helpText(
-        "Input a gene ID, e.g",
-        em("Ghir_D11G029140, Ghir_D11G029140.1"),
-        br(),
-        'click plot for expression, ',
-        'GO information and homologs founded in TAIR10 '
-      ),
-      textInput(
-        "geneid",
-        label = h3("Input a gene ID"),
-        placeholder = "Ghir_D11G029140"
-      ),
-      actionButton('plot', 'Plot'),
-      downloadButton("downloadfig", "Download png"),
-      width = 3
-    ),
-    
-    mainPanel(tabsetPanel(
-      tabPanel(
-        "plots",
-        h4("circadian rhythm, gene expression level"),
-        plotOutput("circa_plot"),
-        h4("expression level of isoform in different tissues"),
-        plotOutput("tissue_plot"),
-        textOutput("tissue_err", container = h1),
-        h4("different expression level of protein between FL and WT"),
-        plotOutput("prot_plot"),
-        textOutput("prot_err", container = h1)
-      ),
-      tabPanel(
-        "tables",
-        h4("Go information"),
-        DT::dataTableOutput('go'),
-        h4("homologs in ", em("arabidopsis thaliana")),
-        DT::dataTableOutput('homo_ara')
-      )
-    ))
-    
-    # Show a plot of the generated distribution
+  tabsetPanel(
+    tabPanel("generator", useShinyjs(), # Include shinyjs
+             theme = shinytheme("simplex"),
+             # Application title
+             titlePanel("Circadian rhythm plot generator"),
+             
+             
+             sidebarLayout(
+               sidebarPanel(
+                 helpText(
+                   "Input a gene ID, e.g",
+                   em("Ghir_D11G029140, Ghir_D11G029140.1"),
+                   br(),
+                   'click plot for expression, ',
+                   'GO information and homologs found in TAIR10 '
+                 ),
+                 textInput(
+                   "geneid",
+                   label = h3("Input a gene ID"),
+                   placeholder = "Ghir_D11G029140"
+                 ),
+                 actionButton('plot', 'Plot'),
+                 downloadButton("downloadfig", "Download png"),
+                 width = 3
+               ),
+               
+               mainPanel(tabsetPanel(
+                 tabPanel(
+                   "plots",
+                   h4("circadian rhythm, gene expression level"),
+                   plotOutput("circa_plot"),
+                   h4("expression level of isoform in different tissues"),
+                   plotOutput("tissue_plot"),
+                   textOutput("tissue_err", container = h1),
+                   h4("different expression level of protein between FL and WT"),
+                   plotOutput("prot_plot"),
+                   textOutput("prot_err", container = h1)
+                 ),
+                 tabPanel(
+                   "tables",
+                   h4("Go information"),
+                   DT::dataTableOutput('go'),
+                   h4("homologs in ", em("arabidopsis thaliana")),
+                   DT::dataTableOutput('homo_ara')
+                 )
+               ))
+               
+               # Show a plot of the generated distribution
+             )),
+    tabPanel("about", h1("any problems please contact to wangyue"), 
+                         h3("github: ", a(href="https://github.com/wangyue-gagua/circadian_shiny", "https://github.com/wangyue-gagua/circadian_shiny")),
+             br(),
+             h3(str_c("last update time: ", date()))
+             )
   )
+  
 )
 
 #Define server logic required to draw a histogram
@@ -285,18 +295,23 @@ server <- function(input, output) {
                  if (is_character(tissue_plot)) {
                    output$tissue_err <- renderText(tissue_plot)
                    output$tissue_plot <- renderPlot(NULL)
+                   hide("tissue_plot")
                  } else{
                    output$tissue_plot <- renderPlot(tissue_plot)
                    output$tissue_err <- renderText(NULL)
+                   show("tissue_plot")
                  }
+
                  
                  prot_plot <- my_prot_plot(input$geneid)
                  if (is_character(prot_plot)) {
                    output$prot_err <- renderText(prot_plot)
                    output$prot_plot <- renderPlot(NULL)
+                   hide("prot_plot")
                  } else{
                    output$prot_plot <- renderPlot(prot_plot)
                    output$prot_err <- renderText(NULL)
+                   show("prot_plot")
                  }
                  
                  go_table <- my_go_table(input$geneid)
