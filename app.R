@@ -5,12 +5,14 @@ library(shinyjs)
 library(tidyverse)
 library(readxl)
 library(shinythemes)
+library(svglite)
 # library(gridExtra)
 
 
 # import sample list , raw gene count and TMM normalized expression matrix
 # genes.counts <- read.delim("./merged_counts/genes.counts.matrix", row.names=1, check.names = FALSE )
 # genes.TMM.EXPR <- read.delim("./merged_counts/genes.TMM.EXPR.matrix", row.names=1, check.names = FALSE)
+
 sample_info <-
   read.table("./merged_counts/sample.info",
              row.names = 'sample',
@@ -65,7 +67,7 @@ rep_reduce <- function(st) {
     mean_li[i] <-
       mean(c(sample_info_exp[[st]][[2 * i - 1]], sample_info_exp[[st]][[2 * i]]))
   }
-  
+
   std_li <- c()
   for (i in 1:(length(sample_info_exp[[st]]) / 2)) {
     std_li[i] <-
@@ -112,7 +114,7 @@ my_cir_plot <- function(geneid, alia_name = NULL) {
       alpha = 0.2
     ) +
     labs(title = geneid, subtitle = alia_name)
-  
+
 }
 
 my_tissue_plot <- function(st) {
@@ -154,7 +156,7 @@ my_prot_plot <- function(st) {
     error = function(cnd) {
       str_c("No MS data available! ", st)
     },
-    
+
     {
       df <- AD_pro_19920 %>% filter(str_detect(tracking_id, st))
       if(nrow(df)>0){df <- df[1,]}
@@ -201,6 +203,7 @@ my_ara_homo_tbl <- function(str) {
     return(str_homo)
 }
 
+
 # data preprocess____________________________________________________________
 
 
@@ -227,8 +230,16 @@ ui <- fluidPage(
                    label = h3("Input a gene ID"),
                    placeholder = "Ghir_D11G029140"
                  ),
+                 #button
                  actionButton('plot', 'Plot'),
-                 downloadButton("downloadfig", "Download png"),
+                 
+                 downloadButton("downloadSourceData", "Download data"),
+                 downloadButton("downloadfig", "Download fig"),
+                 selectInput("fileType", label = "picture format",
+                             choices = list("png"=".png",
+                                            "jpeg"=".jpeg",
+                                            "svg"=".svg",
+                                            "pdf"=".pdf")),
                  width = 3
                ),
                
@@ -335,12 +346,21 @@ server <- function(input, output) {
   # Downloadable csv of selected dataset ----
   output$downloadfig <- downloadHandler(
     filename = function() {
-      paste(input$geneid, ".png", sep = "")
+      paste(input$geneid, input$fileType, sep = "")
     },
     content = function(file) {
       ggsave(filename = file,
-             plot = my_cir_plot(input$geneid),
-             dpi = 500)
+             plot = my_cir_plot(input$geneid))
+    }
+  )
+  
+  output$downloadSourceData <- downloadHandler(
+    filename = function() {
+      paste(input$geneid,".csv", sep = "")
+    },
+    content = function(filename) {
+      sample_info_exp %>% select(sample, strain, period, time, replicate, labs, input$geneid) %>% 
+        write_csv(file = filename, col_names = TRUE)
     }
   )
 }
