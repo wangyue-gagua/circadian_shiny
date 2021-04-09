@@ -62,5 +62,4 @@ sample_info <-
 genes.TMM.EXPR <- genes.TMM.EXPR %>% select(sample_info$sample)
 
 ## single cell
-
-# load('data/mergeSCE.RData')
+load('data/mergeSCE.RData')
