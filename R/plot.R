@@ -32,7 +32,6 @@
 plotUI <- function(id) {
   ns <- NS(id)
   tagList(
-
     h4("circadian rhythm, gene expression level"),
     plotOutput(ns("circa_plot")),
     textOutput(ns('circa_err'), container = h1),
@@ -42,19 +41,7 @@ plotUI <- function(id) {
     h4("different expression level of protein between FL and WT"),
     plotOutput(ns("prot_plot")),
     textOutput(ns("prot_err"), container = h1)
-
-      h4("circadian rhythm, gene expression level"),
-      plotOutput(ns("circa_plot")),
-      textOutput(ns('circa_err'), container = h1),
-      h4("expression level of isoform in different tissues"),
-      plotOutput(ns("tissue_plot")),
-      textOutput(ns("tissue_err"), container = h1),
-      h4("different expression level of protein between FL and WT"),
-      plotOutput(ns("prot_plot")),
-      textOutput(ns("prot_err"), container = h1)
-
   )
-  
 }
 
 plotServer <- function(id, plot_event, gene_id) {
