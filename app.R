@@ -1,7 +1,11 @@
 source("./helper/data_load.R")
 source("./helper/method.R")
 
-ui <- fluidPage(tabsetPanel(
+ui <- fluidPage(
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "singleCell.css")
+  ),
+  tabsetPanel(
   tabPanel(
     "generator",
     useShinyjs(),

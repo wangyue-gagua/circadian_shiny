@@ -1,0 +1,7 @@
+.dim_redu_flex {
+    display: flex;
+}
+
+.dim_redu_flex img {
+    flex: 1;
+}
