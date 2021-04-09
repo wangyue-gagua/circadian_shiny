@@ -1,6 +1,6 @@
 
 
-<<<<<<< HEAD
+
 
 # data preprocess____________________________________________________________
 
@@ -21,18 +21,18 @@
 #                 condition = !is_character(textPlot))
 #   toggleElement(id = id_err, condition = is_character(textPlot))
 # }
-=======
+
 # data preprocess____________________________________________________________
 
 
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
+
 
 #_____________________________________________________________________________
 
 plotUI <- function(id) {
   ns <- NS(id)
   tagList(
-<<<<<<< HEAD
+
     h4("circadian rhythm, gene expression level"),
     plotOutput(ns("circa_plot")),
     textOutput(ns('circa_err'), container = h1),
@@ -42,7 +42,7 @@ plotUI <- function(id) {
     h4("different expression level of protein between FL and WT"),
     plotOutput(ns("prot_plot")),
     textOutput(ns("prot_err"), container = h1)
-=======
+
       h4("circadian rhythm, gene expression level"),
       plotOutput(ns("circa_plot")),
       textOutput(ns('circa_err'), container = h1),
@@ -52,7 +52,7 @@ plotUI <- function(id) {
       h4("different expression level of protein between FL and WT"),
       plotOutput(ns("prot_plot")),
       textOutput(ns("prot_err"), container = h1)
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
+
   )
   
 }
@@ -61,10 +61,9 @@ plotServer <- function(id, plot_event, gene_id) {
   moduleServer(id,
                
                function(input, output, session) {
-<<<<<<< HEAD
-=======
+
+
                  ###
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
                  # default plot page
                  de_cir <- my_cir_plot("Ghir_D11G029140")
                  
@@ -75,13 +74,13 @@ plotServer <- function(id, plot_event, gene_id) {
                  output$circa_plot <- renderPlot(de_cir)
                  output$tissue_plot <-
                    renderPlot(de_tissue)
-<<<<<<< HEAD
+
                  output$"prot_plot" <- renderPlot(de_pro)
                  
-=======
+
                  output$prot_plot <- renderPlot(de_pro)
 
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
+
                  observeEvent(plot_event(), {
                    if (!str_detect(gene_id(),
                                    "^Ghir_\\w\\d{2}G\\d{6}$|^Ghir_\\w\\d{2}G\\d{6}\\.\\d$")) {
@@ -89,7 +88,7 @@ plotServer <- function(id, plot_event, gene_id) {
                    } else{
                      circa_plot <-
                        my_cir_plot(str_extract(gene_id(), "^Ghir_\\w\\d{2}G\\d{6}"))
-<<<<<<< HEAD
+
                      if (is_character(circa_plot)) {
                        output$circa_err <- renderText(circa_plot)
                      }else{
@@ -98,70 +97,31 @@ plotServer <- function(id, plot_event, gene_id) {
                      toggleElement(id = "circa_plot",
                                    condition = !is_character(circa_plot))
                      toggleElement(id = "circa_err", condition = is_character(circa_plot))
-                     
-=======
-                     
-                     
-                     if (is_character(circa_plot)) {
-                       output$circa_err <- renderText(circa_plot)
-                       output$circa_plot <- renderPlot(NULL)
-                       hide("circa_plot")
-                     } else{
-                       output$circa_plot <- renderPlot(circa_plot)
-                       output$circa_err <- renderText(NULL)
-                       show("circa_plot")
-                     }
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
-                     
+                  
                      tissue_plot <- my_tissue_plot(gene_id())
                      if (is_character(tissue_plot)) {
                        output$tissue_err <- renderText(tissue_plot)
-<<<<<<< HEAD
+
                      }else{
                        output$tissue_plot <- renderPlot(tissue_plot)
                      }
                      toggleElement(id = "tissue_plot",
                                    condition = !is_character(tissue_plot))
                      toggleElement(id = "tissue_err", condition = is_character(tissue_plot))
-=======
-                       output$tissue_plot <- renderPlot(NULL)
-                       hide("tissue_plot")
-                     } else{
-                       output$tissue_plot <- renderPlot(tissue_plot)
-                       output$tissue_err <- renderText(NULL)
-                       show("tissue_plot")
-                     }
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
-                     
-                     
+
                      prot_plot <- my_prot_plot(gene_id())
                      if (is_character(prot_plot)) {
                        output$prot_err <- renderText(prot_plot)
-<<<<<<< HEAD
+
                      }else{
                        output$prot_plot <- renderPlot(prot_plot)
                      }
                      toggleElement(id = "prot_plot",
                                    condition = !is_character(prot_plot))
                      toggleElement(id = "prot_err", condition = is_character(prot_plot))
-=======
-                       output$prot_plot <- renderPlot(NULL)
-                       hide("prot_plot")
-                     } else{
-                       output$prot_plot <- renderPlot(prot_plot)
-                       output$prot_err <- renderText(NULL)
-                       show("prot_plot")
-                     }
-                     
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
-                     
+
                    }
                  })
                  
-<<<<<<< HEAD
-                 
-=======
-  
->>>>>>> cec162654ce671e115c0575a8feeb2c932fb21ad
                })
 }
