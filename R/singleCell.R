@@ -4,10 +4,16 @@ singleCellUI <- function(id) {
   tagList(
     div(
       class = "dim_redu_flex",
+      img(src = "src/all_genes_UMAP.png", width = "30vw"),
+      img(src = "src/cor_gene_UMAP.png", width = "30vw")
+    ),
+    div(
+      class = "dim_redu_flex",
       plotOutput(ns("umap")),
       plotOutput(ns("pca"))
     ),
     # plotOutput(ns("violin")),
+    plotOutput(ns("sample_vln")),
     plotOutput(ns("feature"))
   )
 }
@@ -48,6 +54,11 @@ singleCellServer <- function(id, plot_event, gene_id) {
           #     features = c(id)
           #   )
           # })
+          output$sample_vln <- renderPlot({
+            plotExpression(all_strain_sce, c(gene_id()),
+              x = "cluster", colour_by = "SampleName"
+            )
+          })
           output$feature <- renderPlot({
             FeaturePlot(
               mergeSCE,

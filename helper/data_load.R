@@ -6,6 +6,8 @@ library(shinythemes)
 library(svglite)
 library(pheatmap)
 library(Seurat)
+library(SingleCellExperiment)
+library(scater)
 # library(gridExtra)
 
 
@@ -72,3 +74,4 @@ genes.TMM.EXPR <- genes.TMM.EXPR %>% select(sample_info$sample)
 
 ## single cell
 load("data/mergeSCE.RData")
+load("data/all_strain_sce.Rdata")

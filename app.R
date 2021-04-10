@@ -22,7 +22,6 @@ ui <- fluidPage(
       ),
       mainPanel(
         tabsetPanel(
-          # plotUI('input_id-plots')
           tabPanel(
             title = "plots",
             plotUI("plots")
