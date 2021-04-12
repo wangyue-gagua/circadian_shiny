@@ -17,7 +17,6 @@ ui <- fluidPage(
       sidebarPanel(
         geneInputUI("input_id"),
         downloadUI("download"),
-        batchUI("batch"),
         width = 3
       ),
       mainPanel(
@@ -36,8 +35,7 @@ ui <- fluidPage(
           ),
           tabPanel(
             title = "batch",
-            h4("heatmap for multiple genes"),
-            plotOutput("heatmap")
+            batchUI("batch")
           )
         )
       )
@@ -70,10 +68,7 @@ server <- function(input, output) {
   tableServer("tables", input_id$tri, input_id$id)
   singleCellServer("single_cell", input_id$tri, input_id$id)
 
-  heat_map <- batchServer("batch")
-  output$heatmap <- renderPlot({
-    heat_map()
-  })
+  batchServer("batch")
 
   downloadServer("download")
 }

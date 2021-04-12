@@ -59,7 +59,7 @@ my_tissue_plot <- function(st) {
     },
     {
       temp <-
-        iso_exp_tpm %>% filter(str_detect(tracking_id, st)) %>% column_to_rownames(var = "tracking_id") %>%
+        iso_exp_tpm %>% filter(str_match(tracking_id, "(.*)\\.\\d")[,2] %in% st) %>% column_to_rownames(var = "tracking_id") %>%
         mutate("leaf_0_" = leaf_0) %>% select(!leaf_0)
       if (nrow(temp) > 0) {
         temp <- temp[1,]

@@ -12,7 +12,7 @@ library(scater)
 
 
 # import sample list , raw gene count and TMM normalized expression matrix
-# genes.counts <- read.delim("./merged_counts/genes.counts.matrix", row.names=1, check.names = FALSE )
+genes.counts <- read.delim("./merged_counts/genes.counts.matrix", row.names = 1, check.names = FALSE )
 genes.TMM.EXPR <-
   read.delim(
     "./merged_counts/genes.TMM.EXPR.matrix",
