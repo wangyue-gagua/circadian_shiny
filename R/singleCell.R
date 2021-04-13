@@ -4,17 +4,17 @@ singleCellUI <- function(id) {
   tagList(
     div(
       class = "dim_redu_flex",
-      img(src = "src/all_genes_UMAP.png", width = "30vw"),
-      img(src = "src/cor_gene_UMAP.png", width = "30vw")
+      img(src = "src/fiber_umap.png", width = "30vw"),
+      img(src = "src/fiber_pca.png", width = "30vw"),
     ),
     div(
       class = "dim_redu_flex",
-      plotOutput(ns("umap")),
-      plotOutput(ns("pca"))
+      img(src = "src/cor_gene_UMAP.png"),
+      plotOutput(ns("sample_exp"))
     ),
     # plotOutput(ns("violin")),
-    plotOutput(ns("sample_vln")),
-    plotOutput(ns("feature"))
+    plotOutput(ns("feature")),
+    plotOutput(ns("sample_vln"))
   )
 }
 
@@ -31,29 +31,20 @@ singleCellServer <- function(id, plot_event, gene_id) {
         } else {
           ## transform from xx_xx to xx-xx term
           id <- stringr::str_replace(gene_id(), "_", "-")
-
-          output$umap <- renderPlot({
-            # generate bins based on input$bins from ui.R
-            DimPlot(
-              mergeSCE,
-              reduction = "UMAP",
-              # pca, umap, tsne
-              group.by  = "Clu",
-              label = T
-            )
-          })
-          output$pca <- renderPlot({
-            DimPlot(mergeSCE,
-              reduction = "PCA",
-              group.by = "RawPCAClu", label = T
-            )
-          })
           # output$violin <- renderPlot({
           #   VlnPlot(
           #     object = mergeSCE,
           #     features = c(id)
           #   )
           # })
+          output$sample_exp <- renderPlot({
+            plotReducedDim(all_strain_sce,
+              dimred = "UMAP",
+              colour_by = gene_id()
+            ) +
+              facet_grid(. ~ all_strain_sce@colData$SampleName) +
+              scale_color_gradient(low = "#cecbcb00", high = "#774aff")
+          })
           output$sample_vln <- renderPlot({
             plotExpression(all_strain_sce, c(gene_id()),
               x = "cluster", colour_by = "SampleName"
