@@ -139,3 +139,10 @@ my_ara_homo_tbl <- function(str) {
   else
     return(str_homo)
 }
+
+## ID convert
+IdConvert <- function(convert_bed, input_ID) {
+  return(
+    convert_bed %>% filter(str_detect(ID_In, input_ID))
+  )
+}

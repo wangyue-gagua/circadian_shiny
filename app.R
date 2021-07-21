@@ -1,6 +1,7 @@
 source("./helper/data_load.R")
 source("./helper/method.R")
 
+
 ui <- fluidPage(
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "singleCell.css")
@@ -43,6 +44,18 @@ ui <- fluidPage(
     )
   ),
   tabPanel(
+    "tools",
+    sidebarLayout(
+      sidebarPanel(
+        IdConvert_UI("ConvertIn"),
+        width = 3
+      ),
+      mainPanel(
+        ConvertOut_UI("ConvertOut")
+      )
+    )
+  ),
+  tabPanel(
     "about",
     h1("any problems please contact to wangyue"),
     br(),
@@ -71,6 +84,9 @@ server <- function(input, output) {
   batchServer("batch")
 
   downloadServer("download")
+  ## tools
+  convertOpt <- IdConvert_Server("ConvertIn")
+  ConvertOutServer("ConvertOut", convertOpt$genome ,convertOpt$id, convertOpt$run)
 }
 
 # Run the application

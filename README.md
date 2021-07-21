@@ -6,7 +6,7 @@
 
 - [x] 采用**Shiny Modules**拆分重构
 
-- [ ] 添加不同基因组id转换功能
+- [x] 添加不同基因组id转换功能
 
 - [ ] 尝试采用[*redis*](https://redis.io/)进行disk cache, [Rstudio ref article](https://shiny.rstudio.com/articles/caching.html)
 
@@ -24,3 +24,8 @@
 设置了服务器每日重启，为不同组织的表达量水平提供了热图用于批处理
 
 - [ ] 修复批处理需要resize界面的奇怪bug，大概率是与响应式相关，暂时想不到解决方案。
+
+### 2021/7/21
+新增了tool页面用于提供不同版本基因组之间的ID转换，暂时只提供G. hirsutum 中**WHU v1**基因组转**HAU v1**以及**ZJU v2.1**转**HAU v1**的功能。
+- [ ] 提供更多基因组版本以供选择
+- [ ] 整合不同版本基因组与拟南芥同于比对的数据
