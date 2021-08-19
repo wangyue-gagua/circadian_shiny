@@ -6,7 +6,7 @@ ConvertOut_UI <- function(id) {
 ConvertOutServer <- function(id, genomeVer, geneID, plotEvent) {
   moduleServer(id, function(input, output, session) {
     observeEvent(plotEvent(), {
-      if (genomeVer() == "WHU") {
+      if (genomeVer() == "WHU" || genomeVer() == "ZJU") {
         # Input validation
         if (str_detect(geneID(), "[AD]\\d{2}G\\d+")) {
           result <- IdConvert(WHU, geneID())

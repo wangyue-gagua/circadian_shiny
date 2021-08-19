@@ -80,3 +80,6 @@ load("data/all_strain_sce.Rdata")
 WHU <- read.delim(file = "./data/Gh_whu_to_hau.bed", header = F)
 colnames(WHU) <- c("Chrom_In", "Start_In", "End_In", "ID_In", "Identity", "Strand_In",
                    "Chrom_Out", "Start_Out", "End_Out", "ID_Out", "Score", "Strand_Out")
+ZJU <- read.delim(file = "./data/Gh_zju_to_hau.bed", header = F)
+colnames(ZJU) <- c("Chrom_In", "Start_In", "End_In", "ID_In", "Identity", "Strand_In",
+                   "Chrom_Out", "Start_Out", "End_Out", "ID_Out", "Score", "Strand_Out")
