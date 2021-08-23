@@ -25,22 +25,25 @@ downloadServer <- function(id , gene_id) {
     ## module function
     function(input, output, session) {
       # Downloadable csv of selected dataset
-      output$downloadfig <- downloadHandler(
+      output$fig <- downloadHandler(
         filename = function() {
-          paste(gene_id, input$fileType, sep = "")
+          paste(gene_id(), input$fileType, sep = "")
         },
         content = function(file) {
           ggsave(filename = file,
-                 plot = my_cir_plot(gene_id))
+                 plot = my_cir_plot(gene_id()))
         }
       )
       
-      output$downloadSourceData <- downloadHandler(
+      output$SourceData <- downloadHandler(
         filename = function() {
-          paste(gene_id, ".csv", sep = "")
+          paste(gene_id(), ".csv", sep = "")
         },
         content = function(filename) {
-          sample_info_exp %>% select(sample, strain, period, time, replicate, labs, gene_id) %>%
+          test <- sample_info_exp %>% select(sample, strain, period, time, replicate, labs, gene_id())
+          print("test")
+          print(test)
+          sample_info_exp %>% select(sample, strain, period, time, replicate, labs, gene_id()) %>%
             write_csv(file = filename, col_names = TRUE)
         }
       )

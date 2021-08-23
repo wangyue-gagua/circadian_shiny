@@ -83,7 +83,7 @@ server <- function(input, output) {
 
   batchServer("batch")
 
-  downloadServer("download")
+  downloadServer("download", input_id$id)
   ## tools
   convertOpt <- IdConvert_Server("ConvertIn")
   ConvertOutServer("ConvertOut", convertOpt$genome ,convertOpt$id, convertOpt$run)
