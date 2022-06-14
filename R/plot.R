@@ -35,6 +35,11 @@ plotUI <- function(id) {
     h4("circadian rhythm, gene expression level"),
     plotOutput(ns("circa_plot")),
     textOutput(ns("circa_err"), container = h1),
+    
+    h4("circadian rhythm, gene expression level, 0dpa-2dpa WT and FL, fine interval"),
+    plotOutput(ns("circa_plot_fine_interval")),
+    textOutput(ns("circa_err_fine_interval"), container = h1),
+    
     h4("expression level of isoform in different tissues"),
     plotOutput(ns("tissue_plot")),
     textOutput(ns("tissue_err"), container = h1),
@@ -53,12 +58,17 @@ plotServer <- function(id, plot_event, gene_id) {
       ###
       # default plot page
       de_cir <- my_cir_plot("Ghir_D11G029140")
+      
+      de_cir_fine <- my_fine_cir_plot("Ghir_D11G029140")
 
       de_tissue <- my_tissue_plot("Ghir_D11G029140")
       de_pro <- my_prot_plot("Ghir_D11G029140")
 
 
       output$circa_plot <- renderPlot(de_cir)
+      
+      output$circa_plot_fine_interval <- renderPlot(circa_plot_fine_interval)
+      
       output$tissue_plot <-
         renderPlot(de_tissue)
 
@@ -88,6 +98,22 @@ plotServer <- function(id, plot_event, gene_id) {
             condition = !is_character(circa_plot)
           )
           toggleElement(id = "circa_err", condition = is_character(circa_plot))
+          # 
+          circa_plot_fine_interval <-
+            my_cir_plot_WT_FL_0_2dpa(str_extract(gene_id(), "^Ghir_\\w\\d{2}G\\d{6}"))
+          
+          if (is_character(circa_plot_fine_interval)) {
+            output$circa_err <- renderText(circa_plot_fine_interval)
+          } else {
+            output$circa_plot_fine_interval <- renderPlot(circa_plot_fine_interval)
+          }
+          toggleElement(
+            id = "circa_plot_fine_interval",
+            condition = !is_character(circa_plot_fine_interval)
+          )
+          toggleElement(id = "circa_err_fine_interval", condition = is_character(circa_plot_fine_interval))
+          
+          # 
 
           tissue_plot <- my_tissue_plot(gene_id())
           if (is_character(tissue_plot)) {

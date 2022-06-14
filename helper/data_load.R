@@ -27,6 +27,8 @@ sample_info <-
   )
 sample_info_exp <- read_csv("./merged_counts/sample_info_exp.csv")
 
+WT_FL_0_2day_TMM_sample_exp <- read_csv("./merged_counts/WT_FL_0_2day_TMM_sample_exp.csv")
+
 iso_exp_tpm <- read_delim(
   "data/isoforms(HUA-ccNET).fpkm_table",
   "\t",

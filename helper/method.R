@@ -51,6 +51,59 @@ my_cir_plot <- function(geneid, alia_name = NULL) {
   )
 }
 
+## WT_FL_0_2day
+WT_FL_0_2day_rep_reduce <- function(st) {
+  tempvar <- sym(st)
+  WT_FL_0_2day_TMM_sample_exp %>%
+    select(c(1:6), !!tempvar,) %>%
+    group_by(strain, period, time, labs) %>%
+    summarise(
+      'mean_li' = mean(!!tempvar),
+      'std_li' = sd(!!tempvar),
+      .groups = "keep"
+    )
+}
+my_cir_plot_WT_FL_0_2dpa <- function(geneid, alia_name = NULL) {
+  tryCatch(
+    error = function(cnd) {
+      str_c("No RNA-seq data WT_FL_0_2dpa available! ", geneid)
+    },
+    {
+      # 光照时间为 7am-10:30pm
+      rects <-
+        data.frame(xstart = c(14.5, 38.5, 62.5),
+                   xend = c(23, 47, 71))
+      sub_df <- WT_FL_0_2day_rep_reduce(geneid)
+      ggplot(sub_df, aes(x = time, y = mean_li, color = strain)) +
+        geom_point(size = 3) +
+        facet_grid(rows = vars(strain)) +
+        geom_errorbar(
+          aes(ymax = std_li + mean_li,
+              ymin = mean_li - std_li),
+          width = 2,
+          color = 'black'
+        ) +
+        geom_line() +
+        ylab("relative expression/(TMM)") +
+        scale_x_continuous(breaks = seq(1, 69, 4), labels = sub_df$labs[1:(length(sub_df$labs) /
+                                                                             2)]) +
+        geom_rect(
+          data = rects,
+          aes(
+            xmin = xstart,
+            xmax = xend,
+            ymin = 0,
+            ymax = Inf
+          ),
+          inherit.aes = FALSE,
+          alpha = 0.2
+        ) +
+        labs(title = geneid, subtitle = alia_name) +
+        theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+    }
+  )
+}
+
 
 my_tissue_plot <- function(st) {
   tryCatch(
