@@ -59,7 +59,7 @@ plotServer <- function(id, plot_event, gene_id) {
       # default plot page
       de_cir <- my_cir_plot("Ghir_D11G029140")
       
-      de_cir_fine <- my_fine_cir_plot("Ghir_D11G029140")
+      de_cir_fine <- my_cir_plot_WT_FL_0_2dpa("Ghir_D11G029140")
 
       de_tissue <- my_tissue_plot("Ghir_D11G029140")
       de_pro <- my_prot_plot("Ghir_D11G029140")
@@ -67,7 +67,7 @@ plotServer <- function(id, plot_event, gene_id) {
 
       output$circa_plot <- renderPlot(de_cir)
       
-      output$circa_plot_fine_interval <- renderPlot(circa_plot_fine_interval)
+      output$circa_plot_fine_interval <- renderPlot(de_cir_fine)
       
       output$tissue_plot <-
         renderPlot(de_tissue)
