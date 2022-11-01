@@ -75,7 +75,8 @@ sample_info <-
 genes.TMM.EXPR <- genes.TMM.EXPR %>% select(sample_info$sample)
 
 ## single cell
-load("data/mergeSCE.RData")
+# load("data/mergeSCE.RData") 转移到另一个硬盘
+load("/data1/wangy/data/R_single_cell/mergeSCE.RData")
 load("data/all_strain_sce.Rdata")
 
 ## ID convert
