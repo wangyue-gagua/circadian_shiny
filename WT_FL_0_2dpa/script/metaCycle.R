@@ -82,7 +82,11 @@ FL_dat <- FL_meta2d %>% filter(BH.Q < 0.01)
 
 WT_0_2day_genes_TMM_EXPR_mergeRep_selected <- read_csv("WT_0_2day_genes_TMM_EXPR_mergeRep_selected.csv", )
 FL_0_2day_genes_TMM_EXPR_mergeRep_selected <- read_csv("FL_0_2day_genes_TMM_EXPR_mergeRep_selected.csv", )
-
+# tempWT <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>% mutate(expSum = rowSums(select(., -Geneid))) # WT 中检测到50000w个基因表达
+# sum(tempWT$expSum) / nrow(WT_0_2day_genes_TMM_EXPR_mergeRep_selected) # 267.1212
+# tempFL <- FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>% mutate(expSum = rowSums(select(., -Geneid))) # FL 中检测到50000w个基因表达
+# sum(tempFL$expSum) / nrow(FL_0_2day_genes_TMM_EXPR_mergeRep_selected) # 247.5492
+# FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>% mutate(expSum = rowSums(select(., -Geneid))) %>% filter(expSum > 3) %>% nrow() # FL 中检测到49954w个基因表达
 circ_WT_TMM_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
   filter(Geneid %in% WT_dat$CycID) %>%
   column_to_rownames(var = "Geneid")
