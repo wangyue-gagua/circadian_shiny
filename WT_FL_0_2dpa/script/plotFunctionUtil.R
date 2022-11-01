@@ -5,45 +5,45 @@ plotRepCirca <- function(str, alia_name = "") {
     colnames(df)[7] <- "measure"
 
 
-rects <-
-    data.frame(
-        xstart = c(14.5, 38.5, 62.5),
-        xend = c(23, 47, 71)
-    )
-ggplot(data = df, aes(time, measure)) +
-    geom_point(aes(col = strain)) +
-    geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
-    facet_wrap(~replicate, nrow = 2) +
-    # labels = df$labs[1:(length(df$labs) / 4)]
-    scale_x_continuous(breaks = seq(1, 69, 4), ) +
-    geom_rect(
-        data = rects,
-        aes(
-            xmin = xstart,
-            xmax = xend,
-            ymin = 0,
-            ymax = Inf
-        ),
-        inherit.aes = FALSE,
-        alpha = 0.2
-    ) +
-    labs(title = str, subtitle = alia_name) +
-    ylab("relative expression/(TMM)") +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+    rects <-
+        data.frame(
+            xstart = c(14.5, 38.5, 62.5),
+            xend = c(23, 47, 71)
+        )
+    ggplot(data = df, aes(time, measure)) +
+        geom_point(aes(col = strain)) +
+        geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
+        facet_wrap(~replicate, nrow = 2) +
+        # labels = df$labs[1:(length(df$labs) / 4)]
+        scale_x_continuous(breaks = seq(1, 69, 4), ) +
+        geom_rect(
+            data = rects,
+            aes(
+                xmin = xstart,
+                xmax = xend,
+                ymin = 0,
+                ymax = Inf
+            ),
+            inherit.aes = FALSE,
+            alpha = 0.2
+        ) +
+        labs(title = str, subtitle = alia_name) +
+        ylab("relative expression/(TMM)") +
+        theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 }
 
 # 合并生物学重复，区分WT FL
 
 WT_FL_0_2day_rep_reduce <- function(st) {
-  tempvar <- sym(st)
-  WT_FL_0_2day_TMM_sample_exp %>%
-    select(c(1:6), !!tempvar,) %>%
-    group_by(strain, period, time, labs) %>%
-    summarise(
-      'mean_li' = mean(!!tempvar),
-      'std_li' = sd(!!tempvar),
-      .groups = "keep"
-    )
+    tempvar <- sym(st)
+    WT_FL_0_2day_TMM_sample_exp %>%
+        select(c(1:6), !!tempvar, ) %>%
+        group_by(strain, period, time, labs) %>%
+        summarise(
+            "mean_li" = mean(!!tempvar),
+            "std_li" = sd(!!tempvar),
+            .groups = "keep"
+        )
 }
 
 my_cir_plot_WT_FL_0_2dpa <- function(geneid, alia_name = NULL) {
@@ -90,4 +90,3 @@ my_cir_plot_WT_FL_0_2dpa <- function(geneid, alia_name = NULL) {
         }
     )
 }
-
