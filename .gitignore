@@ -3,6 +3,9 @@
 /bla_go/
 /DEresult/
 /merged_counts/
+!/WT_FL_0_2dpa/
+/WT_FL_0_2dpa/*
+!/WT_FL_0_2dpa/script/
 nohup.out
 run_circa_App.R
 temp.r
