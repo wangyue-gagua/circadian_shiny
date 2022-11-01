@@ -126,7 +126,33 @@ pheatmap(circ_WT_FL_TMM_FL_specific_mtx,
   show_rownames = F,
   cluster_cols = F,
   scale = "row",
-  # filename = "figure/circ_WT_FL_TMM_FL_specific_mtx.pdf",
+  filename = "figure/circ_WT_FL_TMM_FL_specific_mtx.pdf",
+)
+### kmeans cluster
+set.seed(1)
+circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1 <- pheatmap(circ_WT_FL_TMM_FL_specific_mtx,
+  show_rownames = T,
+  cluster_cols = F,
+  scale = "row",
+  kmeans_k = 8,
+  # filename = "figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1.pdf",
+)
+circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster <- circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1$kmeans$cluster
+circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes <- names(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster[circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster==1])
+
+circ_WT_TMM_FL_specific_cluster1_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
+  filter(Geneid %in% circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes)
+circ_FL_TMM_FL_specific_cluster1_mtx <- FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
+  filter(Geneid %in% circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes)
+
+circ_WT_FL_TMM_FL_specific_cluster1_mtx <- full_join(circ_WT_TMM_FL_specific_cluster1_mtx, circ_FL_TMM_FL_specific_cluster1_mtx, by = "Geneid") %>%
+  column_to_rownames(var = "Geneid")
+
+pheatmap(circ_WT_FL_TMM_FL_specific_cluster1_mtx,
+  show_rownames = F,
+  cluster_cols = F,
+  scale = "row",
+  filename = "figure/circ_WT_FL_TMM_FL_specific_cluster1_mtx.pdf",
 )
 
 ## pheatmap WT specifc合并WT FL
