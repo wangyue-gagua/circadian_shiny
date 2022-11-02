@@ -134,7 +134,7 @@ pheatmap(circ_WT_FL_TMM_FL_specific_mtx,
 )
 ### kmeans cluster
 set.seed(1)
-circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1 <- pheatmap(circ_WT_FL_TMM_FL_specific_mtx,
+circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1 <- pheatmap::pheatmap(circ_WT_FL_TMM_FL_specific_mtx,
   show_rownames = T,
   cluster_cols = F,
   scale = "row",
@@ -143,6 +143,7 @@ circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1 <- pheatmap(circ_WT_FL_TMM_FL_specif
 )
 circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster <- circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1$kmeans$cluster
 circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes <- names(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster[circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster==1])
+# write_lines(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes, "figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes.txt")
 
 circ_WT_TMM_FL_specific_cluster1_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
   filter(Geneid %in% circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes)
