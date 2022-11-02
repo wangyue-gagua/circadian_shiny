@@ -1,3 +1,4 @@
+library(patchwork)
 # 分别绘制生物学重复，不区分WT，FL
 metaInfo_WT_FL_0_2day_TMM_sample_exp <- WT_FL_0_2day_TMM_sample_exp %>% select(1:6)
 plotRepCirca <- function(str, alia_name = "") {
@@ -90,3 +91,14 @@ my_cir_plot_WT_FL_0_2dpa <- function(geneid, alia_name = NULL) {
         }
     )
 }
+
+# plot "Ghir_D12G020190" "Ghir_A12G005280" "Ghir_A13G013150" "Ghir_D07G006230" "Ghir_D02G019940" "Ghir_D08G002570"
+p1 <- plotRepCirca("Ghir_D12G020190")
+p2 <- plotRepCirca("Ghir_A12G005280", "AT5G26830.1 / The mRNA is cell-to-cell mobile")
+p3 <- plotRepCirca("Ghir_A13G013150", "AT5G61170")
+p4 <- plotRepCirca("Ghir_D07G006230", "AT4G11630")
+p5 <- plotRepCirca("Ghir_D02G019940", "AT2G43090 / The mRNA is cell-to-cell mobile")
+p6 <- plotRepCirca("Ghir_D08G002570", "AT5G57330")
+
+p1 + p2 + p3 + p4 + p5 + p6 + plot_layout(guides = 'collect')
+ggsave("figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes_6gene_test.pdf")
