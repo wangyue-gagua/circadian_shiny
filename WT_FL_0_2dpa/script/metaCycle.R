@@ -117,6 +117,9 @@ FL_circ_genes <- FL_dat$CycID
 WT_circ_genes_specific <- setdiff(WT_circ_genes, FL_circ_genes)
 FL_circ_genes_specific <- setdiff(FL_circ_genes, WT_circ_genes)
 WT_FL_circ_genes <- intersect(WT_circ_genes, FL_circ_genes)
+write_lines(WT_circ_genes_specific, "mediumDataSave/WT_circ_genes_specific.txt")
+write_lines(FL_circ_genes_specific, "mediumDataSave/FL_circ_genes_specific.txt")
+write_lines(WT_FL_circ_genes, "mediumDataSave/WT_FL_circ_genes.txt")
 ## pheatmap FL specifc合并WT FL
 circ_WT_TMM_FL_specific_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
   filter(Geneid %in% FL_circ_genes_specific)
