@@ -38,7 +38,7 @@ plotRepCirca <- function(str, alia_name = "") {
 WT_FL_0_2day_rep_reduce <- function(st) {
     tempvar <- sym(st)
     WT_FL_0_2day_TMM_sample_exp %>%
-        select(c(1:6), !!tempvar, ) %>%
+        dplyr::select(c(1:6), !!tempvar, ) %>%
         group_by(strain, period, time, labs) %>%
         summarise(
             "mean_li" = mean(!!tempvar),
@@ -102,3 +102,9 @@ p6 <- plotRepCirca("Ghir_D08G002570", "AT5G57330")
 
 p1 + p2 + p3 + p4 + p5 + p6 + plot_layout(guides = 'collect')
 ggsave("figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes_6gene_test.pdf")
+
+## core circadian genes
+my_cir_plot_WT_FL_0_2dpa("Ghir_A04G012270", "LNK1")
+ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A04G012270_LNK1.pdf")
+my_cir_plot_WT_FL_0_2dpa("Ghir_A05G028660", "LNK2")
+ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A05G028660_LNK2.pdf")
