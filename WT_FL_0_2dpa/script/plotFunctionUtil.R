@@ -96,10 +96,10 @@ my_cir_plot_WT_FL_0_2dpa <- function(geneid, alia_name = NULL) {
 my_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias = NULL) {
     ## input a id list and a gene name, output a grid plot
     gobs <- map(a_chr_list, my_cir_plot_WT_FL_0_2dpa, alias)
-    new_gobs <- map(gobs[seq_along(gobs)], `+`, theme(axis.title.x = element_blank(), axis.text.x = element_blank()))
-    new_gobs[-1] <- gobs[-1]
+    # new_gobs <- map(gobs[seq_along(gobs)], `+`, theme(axis.title.x = element_blank(), axis.text.x = element_blank()))
+    # new_gobs[-1] <- gobs[-1]
 
-    gridExtra::grid.arrange(grobs = new_gobs)
+    gridExtra::grid.arrange(grobs = gobs)
 }
 
 # plot "Ghir_D12G020190" "Ghir_A12G005280" "Ghir_A13G013150" "Ghir_D07G006230" "Ghir_D02G019940" "Ghir_D08G002570"
