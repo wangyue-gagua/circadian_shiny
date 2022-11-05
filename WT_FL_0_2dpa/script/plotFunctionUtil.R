@@ -102,36 +102,4 @@ my_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias = NULL) {
     gridExtra::grid.arrange(grobs = gobs)
 }
 
-# plot "Ghir_D12G020190" "Ghir_A12G005280" "Ghir_A13G013150" "Ghir_D07G006230" "Ghir_D02G019940" "Ghir_D08G002570"
-p1 <- plotRepCirca("Ghir_D12G020190")
-p2 <- plotRepCirca("Ghir_A12G005280", "AT5G26830.1 / The mRNA is cell-to-cell mobile")
-p3 <- plotRepCirca("Ghir_A13G013150", "AT5G61170")
-p4 <- plotRepCirca("Ghir_D07G006230", "AT4G11630")
-p5 <- plotRepCirca("Ghir_D02G019940", "AT2G43090 / The mRNA is cell-to-cell mobile")
-p6 <- plotRepCirca("Ghir_D08G002570", "AT5G57330")
 
-p1 + p2 + p3 + p4 + p5 + p6 + plot_layout(guides = "collect")
-ggsave("figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes_6gene_test.pdf")
-
-## core circadian genes
-my_cir_plot_WT_FL_0_2dpa("Ghir_A04G012270", "LNK1")
-ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A04G012270_LNK1.pdf")
-my_cir_plot_WT_FL_0_2dpa("Ghir_A05G028660", "LNK2")
-ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A05G028660_LNK2.pdf")
-my_cir_plot_WT_FL_0_2dpa("Ghir_D05G009940", "PRR3")
-ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_D05G009940_PRR3.pdf")
-PRR5 <- my_grid_plot_WT_FL_0_2dpa(
-    str_split("Ghir_A11G001650/Ghir_D11G001640/Ghir_A12G025940/Ghir_D12G025960/Ghir_A05G042880", "/")[[1]],
-    "PRR5"
-)
-ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A11G001650_Ghir_D11G001640_Ghir_A12G025940_Ghir_D12G025960_Ghir_A05G042880_PRR5.pdf", PRR5)
-PRR7 <- my_grid_plot_WT_FL_0_2dpa(
-    str_split("Ghir_A09G016930/Ghir_D09G016400/Ghir_A11G035130/Ghir_D11G036010/Ghir_D04G008730/Ghir_A05G035540", "/")[[1]],
-    "PRR7"
-)
-ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A09G016930_Ghir_D09G016400_Ghir_A11G035130_Ghir_D11G036010_Ghir_D04G008730_Ghir_A05G035540_PRR7.pdf", PRR7)
-PRR9 <- my_grid_plot_WT_FL_0_2dpa(
-    str_split("Ghir_A11G010900/Ghir_D11G010820", "/")[[1]],
-    "PRR9"
-)
-ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A11G010900_Ghir_D11G010820_PRR9.pdf", PRR9)

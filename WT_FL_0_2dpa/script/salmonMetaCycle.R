@@ -85,15 +85,15 @@ salmon_FL_meta2d <- read_csv("salmon_FL_meta2d/JTKresult_salmon_FL_0_2day_genes_
 salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected <- read_csv("salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected.csv")
 salmon_FL_0_2day_genes_TMM_EXPR_mergeRep_selected <- read_csv("salmon_FL_0_2day_genes_TMM_EXPR_mergeRep_selected.csv")
 
-salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section1 <- salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>% 
-select(c(1, 2:13))
+salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section1 <- salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
+  select(c(1, 2:13))
 salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section2 <- salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
-select(c(1, 8:19))
+  select(c(1, 8:19))
 
 salmon_FL_0_2day_genes_TMM_EXPR_mergeRep_selected_section1 <- salmon_FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
-select(c(1, 2:13))
+  select(c(1, 2:13))
 salmon_FL_0_2day_genes_TMM_EXPR_mergeRep_selected_section2 <- salmon_FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
-select(c(1, 8:19))
+  select(c(1, 8:19))
 
 write.csv(salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section1, file = "salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section1.csv", row.names = F)
 write.csv(salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section2, file = "salmon_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_section2.csv", row.names = F)
@@ -164,61 +164,73 @@ salmonPlotRepCirca("Ghir_D01G016160.1")
 # cosinor2 Comparison of cosinor parameters of two populations
 
 library(cosinor2)
-library(ggplot2) 
+library(ggplot2)
 library(circacompare)
 set.seed(42)
 
 metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp <- salmon_WT_FL_0_2day_TMM_sample_exp %>% select(1:6)
 
 salmonPlotRepCirca <- function(str, alia_name = "") {
-    df <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp[str])
-    colnames(df)[7] <- "measure"
+  df <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp[str])
+  colnames(df)[7] <- "measure"
 
 
-rects <-
+  rects <-
     data.frame(
-        xstart = c(14.5, 38.5, 62.5),
-        xend = c(23, 47, 71)
+      xstart = c(14.5, 38.5, 62.5),
+      xend = c(23, 47, 71)
     )
-ggplot(data = df, aes(time, measure)) +
+  ggplot(data = df, aes(time, measure)) +
     geom_point(aes(col = strain)) +
     geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
     facet_wrap(~replicate, nrow = 2) +
     scale_x_continuous(breaks = seq(1, 69, 4), labels = df$labs[1:(length(df$labs) /
-        4)]) +
+      4)]) +
     geom_rect(
-        data = rects,
-        aes(
-            xmin = xstart,
-            xmax = xend,
-            ymin = 0,
-            ymax = Inf
-        ),
-        inherit.aes = FALSE,
-        alpha = 0.2
+      data = rects,
+      aes(
+        xmin = xstart,
+        xmax = xend,
+        ymin = 0,
+        ymax = Inf
+      ),
+      inherit.aes = FALSE,
+      alpha = 0.2
     ) +
     labs(title = str, subtitle = alia_name) +
     ylab("expression level (TMM)") +
     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 }
 library(grid)
-salmon_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias=NULL){
+salmon_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias = NULL) {
   ## input a id list and a gene name, output a grid plot
   gobs <- map(a_chr_list, salmonPlotRepCirca, alias)
   new_gobs <- map(gobs[seq_along(gobs)], `+`, theme(axis.title.x = element_blank(), axis.text.x = element_blank()))
   new_gobs[-1] <- gobs[-1]
-  
-  gridExtra::grid.arrange(grobs=new_gobs)
+
+  gridExtra::grid.arrange(grobs = new_gobs)
 }
 
 
 salmon_grid_plot_WT_FL_0_2dpa(filter(salmon_FL_WT_meta2d, geneId == "Ghir_A01G000210")$CycID, alias = "Ghir_A01G000210")
 salmon_grid_plot_WT_FL_0_2dpa(filter(salmon_FL_WT_meta2d, geneId == "Ghir_D04G000830")$CycID)
 
-# 
+#
 salmon_FL_WT_meta2d_hasIsoform_all_has_rhythm_duplicate_gene_tbl <- read_tsv("salmon_FL_WT_meta2d_hasIsoform_all_has_rhythm_duplicate_gene_tbl.tsv")
 
 # import merged_counts/txiCountMatrix.tsv
 WT_FL_0_2day_genes_TMM_EXPR <- read_ts
 salmon_WT_FL_0_2day_count_sample_exp <- read_tsv("../merged_counts/txiCountMatrix.tsv")
 head(salmon_WT_FL_0_2day_count_sample_exp)
+
+salmonPlotRepCirca("Ghir_D01G016160.1")
+tempDf  <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp["Ghir_D01G016160.1"])
+ggplot(data = tempDf, aes(time, Ghir_D01G016160.1)) +
+  geom_point(aes(col = strain)) +
+  geom_line(aes(col = strain)) +
+  facet_wrap(~replicate, nrow = 2)
+tempDf %>% group_by(strain, replicate, period) %>% mutate(detrend = Ghir_D01G016160.1 / mean(Ghir_D01G016160.1)) %>% 
+ggplot(aes(time, detrend)) +
+  geom_point(aes(col = strain)) +
+  geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
+  facet_wrap(~replicate, nrow = 2)
