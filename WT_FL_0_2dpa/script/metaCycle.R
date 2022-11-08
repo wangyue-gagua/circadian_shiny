@@ -5,7 +5,7 @@ library(tidyverse)
 library(data.table)
 # WT_FL_0_2day_TMM_sample_exp <- read_csv("../merged_counts/WT_FL_0_2day_TMM_sample_exp.csv")
 WT_FL_0_2day_TMM_sample_exp <- fread("../merged_counts/WT_FL_0_2day_TMM_sample_exp.csv")
-WT_FL_0_2day_TMM_sample_exp  <- WT_FL_0_2day_TMM_sample_exp %>% as_tibble()
+WT_FL_0_2day_TMM_sample_exp <- WT_FL_0_2day_TMM_sample_exp %>% as_tibble()
 
 WT_FL_0_2day_genes_TMM_EXPR <- read_delim("../merged_counts/WT_FL_0_2day_genes.TMM.EXPR.matrix",
   delim = "\t", escape_double = FALSE,
@@ -126,7 +126,7 @@ circ_WT_TMM_FL_specific_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
 circ_FL_TMM_FL_specific_mtx <- FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
   filter(Geneid %in% FL_circ_genes_specific)
 
-circ_WT_FL_TMM_FL_specific_mtx <- full_join(circ_WT_TMM_FL_specific_mtx, circ_FL_TMM_FL_specific_mtx, by = "Geneid") %>% 
+circ_WT_FL_TMM_FL_specific_mtx <- full_join(circ_WT_TMM_FL_specific_mtx, circ_FL_TMM_FL_specific_mtx, by = "Geneid") %>%
   column_to_rownames(var = "Geneid")
 
 pheatmap(circ_WT_FL_TMM_FL_specific_mtx,
@@ -145,7 +145,7 @@ circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1 <- pheatmap::pheatmap(circ_WT_FL_TMM
   # filename = "figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1.pdf",
 )
 circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster <- circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1$kmeans$cluster
-circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes <- names(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster[circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster==1])
+circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes <- names(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster[circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster == 1])
 # write_lines(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes, "figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes.txt")
 
 circ_WT_TMM_FL_specific_cluster1_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
@@ -342,12 +342,24 @@ chisq.test(matrix(c(17, 258, 5319, 64605), nrow = 2))
 
 
 ## 样本间相关性
-library(ggcorrplot)
-cor_df <- cor(WT_FL_0_2day_genes_TMM_EXPR)
-cor_plot <- ggcorrplot(cor_df, tl.cex = 4, lab = T, lab_size = 1)
-cor_plot_scale <- ggcorrplot(cor_df, tl.cex = 4, lab = T, lab_size = 1,
- digits = 3, title = "样本间相关性", outline.color = "transparent") +
-scale_fill_gradient(limit = c(0.25, 1), low = "white", high = "red")
+sampleTimeTibble <- WT_FL_0_2day_TMM_sample_exp %>%
+  select(time, sample, strain, replicate) %>%
+  group_by(strain) %>%
+  arrange(time, .by_group = T)
+### 样本按时间排序
+WT_FL_0_2day_genes_TMM_EXPR_TimeSorted <- WT_FL_0_2day_genes_TMM_EXPR %>% select(sampleTimeTibble$sample)
+cor_df <- cor(WT_FL_0_2day_genes_TMM_EXPR_TimeSorted)
+
+annotationSampleTimeTibble <- sampleTimeTibble %>% column_to_rownames(var = "sample") %>% mutate(replicate = as.factor(replicate))
+pheatmap(cor_df, cluster_rows = F, cluster_cols = F, cellwidth = 10, cellheight = 10, fontsize = 6,
+  angle_col = 315, gaps_row = 36, gaps_col = 36,
+  display_numbers = matrix(ifelse(cor_df > 0.99, "*", ""), nrow = nrow(cor_df)),
+  annotation_row = annotationSampleTimeTibble,
+  annotation_col = annotationSampleTimeTibble,
+  filename = "figure/samplesCor/WT_FL_0_2day_genes_TMM_EXPR_TimeSorted_cor.pdf"
+  )
+
+ggsave("figure/samplesCor/allSamplesCor.pdf", samplesCor, device = "pdf")
 
 ggsave("figure/cor_plot.pdf", cor_plot, device = "pdf")
 ggsave("figure/cor_plot_scale.pdf", cor_plot_scale, device = "pdf")
@@ -468,7 +480,7 @@ for (i in seq(1, length(FL_WT_meta2d_circa$CycID))) {
     control = list(grouped_params = c("k", "alpha", "phi"), random_params = c("phi1")),
     period = 24
   )
-  if(is.null(outDf)) {
+  if (is.null(outDf)) {
     next
   }
   messorDiff <- outDf$summary %>%
@@ -505,20 +517,22 @@ FL_WT_meta2d_circa %>% filter(abs(phaseDiff) > 8) # 相位差最大的两个基�
 # 统计相位差异分布
 phaseDiffTable <- tibble(
   PhaseDiff = c("<1", "1 ~ 4", "4 ~ 8", "8 ~ 12"),
-  nums = c(sum(abs(FL_WT_meta2d_circa$phaseDiff) < 1),
-           sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 1 & abs(FL_WT_meta2d_circa$phaseDiff) < 4),
-           sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 4 & abs(FL_WT_meta2d_circa$phaseDiff) < 8),
-           sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 8 & abs(FL_WT_meta2d_circa$phaseDiff) < 12)),
+  nums = c(
+    sum(abs(FL_WT_meta2d_circa$phaseDiff) < 1),
+    sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 1 & abs(FL_WT_meta2d_circa$phaseDiff) < 4),
+    sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 4 & abs(FL_WT_meta2d_circa$phaseDiff) < 8),
+    sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 8 & abs(FL_WT_meta2d_circa$phaseDiff) < 12)
+  ),
 )
-label_value <- paste(' h(', round(phaseDiffTable$nums/sum(phaseDiffTable$nums) * 100, 1), '%)', sep = '')
-label <- paste(phaseDiffTable$PhaseDiff, label_value, sep = '')
+label_value <- paste(" h(", round(phaseDiffTable$nums / sum(phaseDiffTable$nums) * 100, 1), "%)", sep = "")
+label <- paste(phaseDiffTable$PhaseDiff, label_value, sep = "")
 ggplot(phaseDiffTable, aes(x = "Content", y = nums, fill = PhaseDiff)) +
   geom_bar(stat = "identity") +
   coord_polar(theta = "y") +
   scale_fill_discrete(labels = label) +
-  labs(x = '', y = '', title = "相位差异分布 N = 1149") +
+  labs(x = "", y = "", title = "相位差异分布 N = 1149") +
   theme(axis.text = element_blank()) +
-  theme(panel.grid=element_blank())
+  theme(panel.grid = element_blank())
 
 
 ## plot
@@ -542,17 +556,17 @@ ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A05G028660_LNK2.pdf")
 my_cir_plot_WT_FL_0_2dpa("Ghir_D05G009940", "PRR3")
 ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_D05G009940_PRR3.pdf")
 PRR5 <- my_grid_plot_WT_FL_0_2dpa(
-    str_split("Ghir_A11G001650/Ghir_D11G001640/Ghir_A12G025940/Ghir_D12G025960/Ghir_A05G042880", "/")[[1]],
-    "PRR5"
+  str_split("Ghir_A11G001650/Ghir_D11G001640/Ghir_A12G025940/Ghir_D12G025960/Ghir_A05G042880", "/")[[1]],
+  "PRR5"
 )
 ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A11G001650_Ghir_D11G001640_Ghir_A12G025940_Ghir_D12G025960_Ghir_A05G042880_PRR5.pdf", PRR5)
 PRR7 <- my_grid_plot_WT_FL_0_2dpa(
-    str_split("Ghir_A09G016930/Ghir_D09G016400/Ghir_A11G035130/Ghir_D11G036010/Ghir_D04G008730/Ghir_A05G035540", "/")[[1]],
-    "PRR7"
+  str_split("Ghir_A09G016930/Ghir_D09G016400/Ghir_A11G035130/Ghir_D11G036010/Ghir_D04G008730/Ghir_A05G035540", "/")[[1]],
+  "PRR7"
 )
 ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A09G016930_Ghir_D09G016400_Ghir_A11G035130_Ghir_D11G036010_Ghir_D04G008730_Ghir_A05G035540_PRR7.pdf", PRR7)
 PRR9 <- my_grid_plot_WT_FL_0_2dpa(
-    str_split("Ghir_A11G010900/Ghir_D11G010820", "/")[[1]],
-    "PRR9"
+  str_split("Ghir_A11G010900/Ghir_D11G010820", "/")[[1]],
+  "PRR9"
 )
 ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A11G010900_Ghir_D11G010820_PRR9.pdf", PRR9)
