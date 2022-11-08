@@ -1,7 +1,7 @@
 library(patchwork)
 # 分别绘制生物学重复，不区分WT，FL
 metaInfo_WT_FL_0_2day_TMM_sample_exp <- WT_FL_0_2day_TMM_sample_exp %>% select(1:6)
-plotRepCirca <- function(str, alia_name = "") {
+plotRepCirca <- function(str, alia_name = NULL) {
     df <- cbind(metaInfo_WT_FL_0_2day_TMM_sample_exp, measure = WT_FL_0_2day_TMM_sample_exp[str])
     colnames(df)[7] <- "measure"
 
@@ -118,8 +118,7 @@ salmonPlotRepCirca <- function(str, alia_name = "") {
     geom_point(aes(col = strain)) +
     geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
     facet_wrap(~replicate, nrow = 2) +
-    scale_x_continuous(breaks = seq(1, 69, 4), labels = df$labs[1:(length(df$labs) /
-      4)]) +
+    scale_x_continuous(breaks = seq(1, 69, 4)) +
     geom_rect(
       data = rects,
       aes(
