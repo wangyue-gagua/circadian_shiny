@@ -181,13 +181,44 @@ salmon_WT_FL_0_2day_count_sample_exp <- read_tsv("../merged_counts/txiCountMatri
 head(salmon_WT_FL_0_2day_count_sample_exp)
 
 salmonPlotRepCirca("Ghir_D01G016160.1")
-tempDf  <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp["Ghir_D01G016160.1"])
-ggplot(data = tempDf, aes(time, Ghir_D01G016160.1)) +
-  geom_point(aes(col = strain)) +
-  geom_line(aes(col = strain)) +
-  facet_wrap(~replicate, nrow = 2)
-tempDf %>% group_by(strain, replicate, period) %>% mutate(detrend = Ghir_D01G016160.1 / mean(Ghir_D01G016160.1)) %>% 
-ggplot(aes(time, detrend)) +
-  geom_point(aes(col = strain)) +
-  geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
-  facet_wrap(~replicate, nrow = 2)
+detrendPlot <- function(transcriptId) {
+  temVar <- sym(transcriptId)
+  tempDf <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp[transcriptId])
+  tempDf %>%
+    group_by(strain, replicate, period) %>%
+    mutate(detrend = !!temVar / (mean(!!temVar) + .Machine$double.eps)) %>%
+    ggplot(aes(time)) +
+    geom_point(aes(y = detrend, col = strain)) +
+    geom_smooth(aes(y = detrend, group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
+    scale_x_continuous(breaks = seq(1, 69, 4)) +
+    geom_rect(
+      data = rects,
+      aes(
+        xmin = xstart,
+        xmax = xend,
+        ymin = 0,
+        ymax = Inf
+      ),
+      inherit.aes = FALSE,
+      alpha = 0.2
+    ) +
+    labs(title = transcriptId) +
+    xlab("time") +
+    ylab("Detrended expression") +
+    facet_wrap(~replicate, nrow = 2)
+}
+detrendPlot("Ghir_D01G016160.1")
+detrendPlot("Ghir_D12G012900.12")
+ggsave("figure/transcriptionPlot/Ghir_D12G012900_12_detrend.pdf", width = 10, height = 5)
+salmonPlotRepCirca("Ghir_D12G012900.12")
+ggsave("figure/transcriptionPlot/Ghir_D12G012900.12.pdf", width = 10, height = 5)
+transcriptList <- rownames(salmon_WT_FL_0_2day_genes_TMM_EXPR)
+transcriptList[str_detect(transcriptList, "Ghir_D12G003730")]
+salmonPlotRepCirca("Ghir_D12G003730.1")
+ggsave("figure/transcriptionPlot/Ghir_D12G003730.1.pdf")
+detrendPlot("Ghir_D12G003730.1")
+ggsave("figure/transcriptionPlot/Ghir_D12G003730.1_detrend.pdf")
+salmonPlotRepCirca("Ghir_D12G003730.2")
+ggsave("figure/transcriptionPlot/Ghir_D12G003730.2.pdf")
+detrendPlot("Ghir_D12G003730.2")
+ggsave("figure/transcriptionPlot/Ghir_D12G003730.2_detrend.pdf")
