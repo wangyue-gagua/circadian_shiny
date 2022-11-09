@@ -143,3 +143,34 @@ salmon_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias = NULL) {
 
   gridExtra::grid.arrange(grobs = new_gobs)
 }
+
+
+plotRepCircaDetrended <- function(str, alia_name = NULL) {
+    metaInfo_WT_FL_0_2day_TMM_sample_exp_detrend <- WT_FL_0_2day_TMM_sample_exp_detrended %>% select(1:6)
+    df <- cbind(metaInfo_WT_FL_0_2day_TMM_sample_exp_detrend, measure = WT_FL_0_2day_TMM_sample_exp_detrended[str])
+    colnames(df)[7] <- "measure"
+    rects <-
+        data.frame(
+            xstart = c(14.5, 38.5, 62.5),
+            xend = c(23, 47, 71)
+        )
+    ggplot(data = df, aes(time, measure)) +
+        geom_point(aes(col = strain)) +
+        geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
+        facet_wrap(~replicate, nrow = 2) +
+        scale_x_continuous(breaks = seq(1, 69, 4), ) +
+        geom_rect(
+            data = rects,
+            aes(
+                xmin = xstart,
+                xmax = xend,
+                ymin = 0,
+                ymax = Inf
+            ),
+            inherit.aes = FALSE,
+            alpha = 0.2
+        ) +
+        labs(title = str, subtitle = alia_name) +
+        ylab("Detrended relative expression") +
+        theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+}
