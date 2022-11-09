@@ -22,5 +22,34 @@ plotRepCirca("Ghir_A10G015270")
 ggsave("figure/geneRepCirca/Ghir_A10G015270_repCirca.pdf", width = 10, height = 10)
 
 head(WT_FL_0_2day_genes_TMM_EXPR_TimeSorted)
-hc <- hclust(dist(WT_FL_0_2day_genes_TMM_EXPR_TimeSorted), method = "average")
-plot(hc, main = "Hierarchical Clustering Dendrogram", xlab = "Genes", sub = "", cex = 0.5)
+library(fastcluster)
+hc <- fastcluster::hclust(dist(t(WT_FL_0_2day_genes_TMM_EXPR_TimeSorted)))
+# BiocManager::install("YuLab-SMU/treedataverse")
+install.packages("https://cran.r-project.org/src/contrib/Archive/rvcheck/rvcheck_0.1.8.tar.gz", repos = NULL) # 降级，不然报错
+BiocManager::install("ggtree")
+library(ggtree)
+ggtree(hc)
+clus <- cutree(hc, 4)
+g <- split(names(clus), clus)
+
+p <- ggtree(hc, linetype='dashed')
+clades <- sapply(g, function(n) MRCA(p, n))
+p <- groupClade(p, clades, group_name='subtree') + aes(color=subtree)
+
+d <- data.frame(label = names(clus), 
+                  time = sampleTimeTibble$time,
+                  phase = factor(sampleTimeTibble$time %% 24),
+                  strain = sampleTimeTibble$strain)
+
+p %<+% d + 
+  layout_dendrogram() + 
+  geom_tippoint(aes(fill=phase, x=x+.5),
+                size=5, color = "black", shape = 21) + 
+  geom_tiplab(aes(label=time), size=3, vjust = 0, hjust = .5, color='black') +
+  geom_tiplab(angle=90, hjust=1, offset=-10, show.legend=FALSE) + 
+  scale_color_brewer(palette='Set1', breaks=1:4) +
+  theme_dendrogram(plot.margin=margin(6,6,80,6)) +
+  theme(legend.position=c(.9, .6))
+
+
+ggsave("figure/samplesCor/hclust_WT_FL_0_2day_TMM_EXPR_TimeSorted_noStrainShape.pdf", width = 10, height = 10)
