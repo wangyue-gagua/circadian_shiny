@@ -146,7 +146,7 @@ circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1 <- pheatmap::pheatmap(circ_WT_FL_TMM
 )
 circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster <- circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1$kmeans$cluster
 circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes <- names(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster[circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster == 1])
-# write_lines(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes, "figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes.txt")
+# write_lines(circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes, "mediumDataSave/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes.txt")
 
 circ_WT_TMM_FL_specific_cluster1_mtx <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>%
   filter(Geneid %in% circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes)
@@ -546,7 +546,7 @@ p5 <- plotRepCirca("Ghir_D02G019940", "AT2G43090 / The mRNA is cell-to-cell mobi
 p6 <- plotRepCirca("Ghir_D08G002570", "AT5G57330")
 
 p1 + p2 + p3 + p4 + p5 + p6 + plot_layout(guides = "collect")
-ggsave("figure/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes_6gene_test.pdf")
+ggsave("figure/geneRepCirca/circ_WT_FL_TMM_FL_specific_mtx_kmeans_seed1_cluster1_Genes_6gene.pdf")
 
 ## core circadian genes
 my_cir_plot_WT_FL_0_2dpa("Ghir_A04G012270", "LNK1")
