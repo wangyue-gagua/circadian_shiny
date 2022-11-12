@@ -81,6 +81,8 @@ enresult_WT_specific_circGenes_BP <- enricher(WT_specific_circGenes,
     TERM2GENE = BP_genes2Go,
     TERM2NAME = BP_id2desc
 )
+DNA_replication <- enresult_WT_specific_circGenes_BP %>% as_tibble() %>% filter(Description == "DNA replication")
+write_tsv(DNA_replication, "mediumDataSave/WT_specific_GOBP_DNA_replication.txt")
 dotplot(enresult_WT_specific_circGenes_BP, showCategory = 20 ) + ggtitle("WT_specific_circGenes_BP")
 ggsave("figure/enresult_WT_specific_circGenes_BP.pdf")
 enresult_WT_specific_circGenes_MF <- enricher(WT_specific_circGenes,
