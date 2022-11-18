@@ -187,3 +187,179 @@ rMATs_merge_SE_FL_exp <- rMATs_merge_SE %>%
     select(c(GeneID, starts_with("FL_")))
 write_csv(rMATs_merge_SE_FL_exp, "mediumDataSave/rMATs_merge_SE_FL_exp.csv")
 
+# 0DPA A3SS
+rMATs_0DPA_9am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_9am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_9am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_9am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_0DPA_9am, FL_0DPA_9am))
+rMATs_0DPA_1pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_1pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_1pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_1pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_0DPA_1pm, FL_0DPA_1pm))
+rMATs_0DPA_5pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_5pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_5pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_5pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_0DPA_5pm, FL_0DPA_5pm))
+rMATs_0DPA_9pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_9pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_9pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_9pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_0DPA_9pm, FL_0DPA_9pm))
+rMATs_0DPA_1am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_1am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_1am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_1am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_0DPA_1am, FL_0DPA_1am))
+rMATs_0DPA_5am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_5am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_5am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_5am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_0DPA_5am, FL_0DPA_5am))
+
+## 1DPA A3SS
+rMATs_1DPA_9am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_9am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_9am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_9am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_1DPA_9am, FL_1DPA_9am))
+rMATs_1DPA_1pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_1pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_1pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_1pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_1DPA_1pm, FL_1DPA_1pm))
+rMATs_1DPA_5pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_5pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_5pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_5pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_1DPA_5pm, FL_1DPA_5pm))
+rMATs_1DPA_9pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_9pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_9pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_9pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_1DPA_9pm, FL_1DPA_9pm))
+rMATs_1DPA_1am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_1am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_1am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_1am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_1DPA_1am, FL_1DPA_1am))
+rMATs_1DPA_5am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_5am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_5am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_5am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_1DPA_5am, FL_1DPA_5am))
+
+## 2DPA A3SS
+rMATs_2DPA_9am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_9am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_9am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_9am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_9am, FL_2DPA_9am))
+rMATs_2DPA_1pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_1pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_1pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_1pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_1pm, FL_2DPA_1pm))
+rMATs_2DPA_5pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_5pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_5pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_5pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_5pm, FL_2DPA_5pm))
+rMATs_2DPA_9pm_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_9pm/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_9pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_9pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_9pm, FL_2DPA_9pm))
+rMATs_2DPA_1am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_1am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_1am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_1am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_1am, FL_2DPA_1am))
+rMATs_2DPA_5am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_5am/A3SS.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_5am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_5am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_5am, FL_2DPA_5am))
+
+## merge
+rMATs_merge_A3SS <- rMATs_0DPA_9am_A3SS %>% full_join(
+    rMATs_0DPA_1pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_0DPA_5pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_0DPA_9pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_0DPA_1am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_0DPA_5am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_1DPA_9am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_1DPA_1pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_1DPA_5pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_1DPA_9pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_1DPA_1am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_1DPA_5am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_2DPA_9am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_2DPA_1pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_2DPA_5pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_2DPA_9pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_2DPA_1am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+) %>% full_join(
+    rMATs_2DPA_5am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+)
+
+# write_csv(rMATs_merge_A3SS, "mediumDataSave/rMATs_merge_A3SS.csv")
+rMATs_merge_A3SS_WT_exp <- rMATs_merge_A3SS %>% 
+select(c(GeneID, starts_with("WT_")))
+rMATs_merge_A3SS_FL_exp <- rMATs_merge_A3SS %>%
+select(c(GeneID, starts_with("FL_")))
+# write_csv(rMATs_merge_A3SS_WT_exp, "mediumDataSave/rMATs_merge_A3SS_WT_exp.csv")
+# write_csv(rMATs_merge_A3SS_FL_exp, "mediumDataSave/rMATs_merge_A3SS_FL_exp.csv")
