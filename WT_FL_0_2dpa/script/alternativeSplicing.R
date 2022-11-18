@@ -320,46 +320,80 @@ rMATs_2DPA_5am_A3SS <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/r
     select(c(GeneID, longExonStart_0base, longExonEnd, shortES, shortEE, flankingES, flankingEE, WT_2DPA_5am, FL_2DPA_5am))
 
 ## merge
-rMATs_merge_A3SS <- rMATs_0DPA_9am_A3SS %>% full_join(
-    rMATs_0DPA_1pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_0DPA_5pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_0DPA_9pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_0DPA_1am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_0DPA_5am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_1DPA_9am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_1DPA_1pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_1DPA_5pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_1DPA_9pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_1DPA_1am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_1DPA_5am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_2DPA_9am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_2DPA_1pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_2DPA_5pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_2DPA_9pm_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_2DPA_1am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-) %>% full_join(
-    rMATs_2DPA_5am_A3SS, by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
-)
+rMATs_merge_A3SS <- rMATs_0DPA_9am_A3SS %>%
+    full_join(
+        rMATs_0DPA_1pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_0DPA_5pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_0DPA_9pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_0DPA_1am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_0DPA_5am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_1DPA_9am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_1DPA_1pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_1DPA_5pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_1DPA_9pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_1DPA_1am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_1DPA_5am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_2DPA_9am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_2DPA_1pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_2DPA_5pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_2DPA_9pm_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_2DPA_1am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    ) %>%
+    full_join(
+        rMATs_2DPA_5am_A3SS,
+        by = c("GeneID", "longExonStart_0base", "longExonEnd", "shortES", "shortEE", "flankingES", "flankingEE")
+    )
 
 # write_csv(rMATs_merge_A3SS, "mediumDataSave/rMATs_merge_A3SS.csv")
-rMATs_merge_A3SS_WT_exp <- rMATs_merge_A3SS %>% 
-select(c(GeneID, starts_with("WT_")))
+rMATs_merge_A3SS_WT_exp <- rMATs_merge_A3SS %>%
+    select(c(GeneID, starts_with("WT_")))
 rMATs_merge_A3SS_FL_exp <- rMATs_merge_A3SS %>%
-select(c(GeneID, starts_with("FL_")))
+    select(c(GeneID, starts_with("FL_")))
 # write_csv(rMATs_merge_A3SS_WT_exp, "mediumDataSave/rMATs_merge_A3SS_WT_exp.csv")
 # write_csv(rMATs_merge_A3SS_FL_exp, "mediumDataSave/rMATs_merge_A3SS_FL_exp.csv")
