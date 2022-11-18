@@ -1,4 +1,5 @@
 library(MetaCycle)
+library(tidyverse)
 # 在metacycle分析之前，需要将NA值替换为0, 但不需要GeneID转换和去重
 ## A3SS WT
 rMATs_merge_A3SS_WT_exp <- read_csv("./mediumDataSave/rMATs_merge_A3SS_WT_exp.csv")
