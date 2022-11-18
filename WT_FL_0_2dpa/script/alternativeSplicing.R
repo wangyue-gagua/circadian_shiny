@@ -165,24 +165,24 @@ rMATs_merge_SE <- read_csv("mediumDataSave/rMATs_merge_SE.csv")
 rMATs_merge_SE_FL_exp <- rMATs_merge_SE %>%
     select(-c(exonStart_0base, exonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE)) %>%
     mutate(
-        FL_0DPA_9am = map_dbl(IncLevel10DPA_9am, convertToDblAndMean),
-        FL_0DPA_1pm = map_dbl(IncLevel10DPA_1pm, convertToDblAndMean),
-        FL_0DPA_5pm = map_dbl(IncLevel10DPA_5pm, convertToDblAndMean),
-        FL_0DPA_9pm = map_dbl(IncLevel10DPA_9pm, convertToDblAndMean),
-        FL_0DPA_1am = map_dbl(IncLevel10DPA_1am, convertToDblAndMean),
-        FL_0DPA_5am = map_dbl(IncLevel10DPA_5am, convertToDblAndMean),
-        FL_1DPA_9am = map_dbl(IncLevel11DPA_9am, convertToDblAndMean),
-        FL_1DPA_1pm = map_dbl(IncLevel11DPA_1pm, convertToDblAndMean),
-        FL_1DPA_5pm = map_dbl(IncLevel11DPA_5pm, convertToDblAndMean),
-        FL_1DPA_9pm = map_dbl(IncLevel11DPA_9pm, convertToDblAndMean),
-        FL_1DPA_1am = map_dbl(IncLevel11DPA_1am, convertToDblAndMean),
-        FL_1DPA_5am = map_dbl(IncLevel11DPA_5am, convertToDblAndMean),
-        FL_2DPA_9am = map_dbl(IncLevel12DPA_9am, convertToDblAndMean),
-        FL_2DPA_1pm = map_dbl(IncLevel12DPA_1pm, convertToDblAndMean),
-        FL_2DPA_5pm = map_dbl(IncLevel12DPA_5pm, convertToDblAndMean),
-        FL_2DPA_9pm = map_dbl(IncLevel12DPA_9pm, convertToDblAndMean),
-        FL_2DPA_1am = map_dbl(IncLevel12DPA_1am, convertToDblAndMean),
-        FL_2DPA_5am = map_dbl(IncLevel12DPA_5am, convertToDblAndMean)
+        FL_0DPA_9am = map_dbl(IncLevel20DPA_9am, convertToDblAndMean),
+        FL_0DPA_1pm = map_dbl(IncLevel20DPA_1pm, convertToDblAndMean),
+        FL_0DPA_5pm = map_dbl(IncLevel20DPA_5pm, convertToDblAndMean),
+        FL_0DPA_9pm = map_dbl(IncLevel20DPA_9pm, convertToDblAndMean),
+        FL_0DPA_1am = map_dbl(IncLevel20DPA_1am, convertToDblAndMean),
+        FL_0DPA_5am = map_dbl(IncLevel20DPA_5am, convertToDblAndMean),
+        FL_1DPA_9am = map_dbl(IncLevel21DPA_9am, convertToDblAndMean),
+        FL_1DPA_1pm = map_dbl(IncLevel21DPA_1pm, convertToDblAndMean),
+        FL_1DPA_5pm = map_dbl(IncLevel21DPA_5pm, convertToDblAndMean),
+        FL_1DPA_9pm = map_dbl(IncLevel21DPA_9pm, convertToDblAndMean),
+        FL_1DPA_1am = map_dbl(IncLevel21DPA_1am, convertToDblAndMean),
+        FL_1DPA_5am = map_dbl(IncLevel21DPA_5am, convertToDblAndMean),
+        FL_2DPA_9am = map_dbl(IncLevel22DPA_9am, convertToDblAndMean),
+        FL_2DPA_1pm = map_dbl(IncLevel22DPA_1pm, convertToDblAndMean),
+        FL_2DPA_5pm = map_dbl(IncLevel22DPA_5pm, convertToDblAndMean),
+        FL_2DPA_9pm = map_dbl(IncLevel22DPA_9pm, convertToDblAndMean),
+        FL_2DPA_1am = map_dbl(IncLevel22DPA_1am, convertToDblAndMean),
+        FL_2DPA_5am = map_dbl(IncLevel22DPA_5am, convertToDblAndMean)
     ) %>%
     select(c(GeneID, starts_with("FL_")))
 write_csv(rMATs_merge_SE_FL_exp, "mediumDataSave/rMATs_merge_SE_FL_exp.csv")
