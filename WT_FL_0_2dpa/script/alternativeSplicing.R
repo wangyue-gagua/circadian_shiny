@@ -710,9 +710,168 @@ rMATs_merge_MXE <- rMATs_0DPA_9am_MXE %>%
     full_join(rMATs_2DPA_1am_MXE, by = MXE_by_Column) %>%
     full_join(rMATs_2DPA_5am_MXE, by = MXE_by_Column)
 # write_csv(rMATs_merge_MXE, "mediumDataSave/rMATs_merge_MXE.csv")
-rMATs_merge_MXE_WT_exp <- rMATs_merge_MXE %>% 
-select(c(GeneID, starts_with("WT_")))
-rMATs_merge_MXE_FL_exp <- rMATs_merge_MXE %>% 
-select(c(GeneID, starts_with("FL_")))
+rMATs_merge_MXE_WT_exp <- rMATs_merge_MXE %>%
+    select(c(GeneID, starts_with("WT_")))
+rMATs_merge_MXE_FL_exp <- rMATs_merge_MXE %>%
+    select(c(GeneID, starts_with("FL_")))
 # write_csv(rMATs_merge_MXE_WT_exp, "mediumDataSave/rMATs_merge_MXE_WT_exp.csv")
 # write_csv(rMATs_merge_MXE_FL_exp, "mediumDataSave/rMATs_merge_MXE_FL_exp.csv")
+
+# RI
+## 0DPA RI
+
+rMATs_0DPA_9am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_9am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_9am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_9am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_0DPA_9am, FL_0DPA_9am))
+rMATs_0DPA_1pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_1pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_1pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_1pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_0DPA_1pm, FL_0DPA_1pm))
+rMATs_0DPA_5pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_5pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_5pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_5pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_0DPA_5pm, FL_0DPA_5pm))
+rMATs_0DPA_9pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_9pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_9pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_9pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_0DPA_9pm, FL_0DPA_9pm))
+rMATs_0DPA_1am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_1am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_1am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_1am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_0DPA_1am, FL_0DPA_1am))
+rMATs_0DPA_5am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_0DPA_5am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_0DPA_5am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_0DPA_5am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_0DPA_5am, FL_0DPA_5am))
+## 1DPA RI
+rMATs_1DPA_9am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_9am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_9am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_9am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_1DPA_9am, FL_1DPA_9am))
+rMATs_1DPA_1pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_1pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_1pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_1pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_1DPA_1pm, FL_1DPA_1pm))
+rMATs_1DPA_5pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_5pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_5pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_5pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_1DPA_5pm, FL_1DPA_5pm))
+rMATs_1DPA_9pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_9pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_9pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_9pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_1DPA_9pm, FL_1DPA_9pm))
+rMATs_1DPA_1am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_1am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_1am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_1am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_1DPA_1am, FL_1DPA_1am))
+rMATs_1DPA_5am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_1DPA_5am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_1DPA_5am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_1DPA_5am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_1DPA_5am, FL_1DPA_5am))
+## 2DPA RI
+rMATs_2DPA_9am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_9am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_9am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_9am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_2DPA_9am, FL_2DPA_9am))
+rMATs_2DPA_1pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_1pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_1pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_1pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_2DPA_1pm, FL_2DPA_1pm))
+rMATs_2DPA_5pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_5pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_5pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_5pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_2DPA_5pm, FL_2DPA_5pm))
+rMATs_2DPA_9pm_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_9pm/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_9pm = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_9pm = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_2DPA_9pm, FL_2DPA_9pm))
+rMATs_2DPA_1am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_1am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_1am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_1am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_2DPA_1am, FL_2DPA_1am))
+rMATs_2DPA_5am_RI <- data.table::fread("/data1/wangy/circadian/rMATsMetaData/rMATs_output_2DPA_5am/RI.MATS.JC.txt") %>%
+    as_tibble(.name_repair = "unique") %>%
+    mutate(
+        WT_2DPA_5am = map_dbl(IncLevel1, convertToDblAndMean),
+        FL_2DPA_5am = map_dbl(IncLevel2, convertToDblAndMean)
+    ) %>%
+    select(c(GeneID, riExonStart_0base, riExonEnd, upstreamES, upstreamEE, downstreamES, downstreamEE, WT_2DPA_5am, FL_2DPA_5am))
+## merge RI
+RI_by_Column <- c("GeneID", "riExonStart_0base", "riExonEnd", "upstreamES", "upstreamEE", "downstreamES", "downstreamEE")
+rMATs_merge_RI <- rMATs_0DPA_9am_RI %>%
+    full_join(rMATs_0DPA_1pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_0DPA_5pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_0DPA_9pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_0DPA_1am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_0DPA_5am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_1DPA_9am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_1DPA_1pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_1DPA_5pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_1DPA_9pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_1DPA_1am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_1DPA_5am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_2DPA_9am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_2DPA_1pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_2DPA_5pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_2DPA_9pm_RI, by = RI_by_Column) %>%
+    full_join(rMATs_2DPA_1am_RI, by = RI_by_Column) %>%
+    full_join(rMATs_2DPA_5am_RI, by = RI_by_Column)
+write_csv(rMATs_merge_RI, "mediumDataSave/rMATs_merge_RI.csv")
+rMATs_merge_RI_WT_exp <- rMATs_merge_RI %>% 
+select(c(GeneID, starts_with("WT_")))
+rMATs_merge_RI_FL_exp <- rMATs_merge_RI %>%
+select(c(GeneID, starts_with("FL_")))
+write_csv(rMATs_merge_RI_WT_exp, "mediumDataSave/rMATs_merge_RI_WT_exp.csv")
+write_csv(rMATs_merge_RI_FL_exp, "mediumDataSave/rMATs_merge_RI_FL_exp.csv")
