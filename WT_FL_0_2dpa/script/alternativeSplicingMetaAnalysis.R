@@ -162,15 +162,73 @@ alterEventCount <- tibble(
     event = c("A3SS", "A5SS", "MXE", "RI", "SE"),
     WT = c(length(A3SS_WT_cycle_genes), length(A5SS_WT_cycle_genes), length(MXE_WT_cycle_genes), length(RI_WT_cycle_genes), length(SE_WT_cycle_genes)),
     FL = c(length(A3SS_FL_cycle_genes), length(A5SS_FL_cycle_genes), length(MXE_FL_cycle_genes), length(RI_FL_cycle_genes), length(SE_FL_cycle_genes))
-) %>% 
-pivot_longer(cols = c(WT, FL), names_to = "strain", values_to = "count")
+) %>%
+    pivot_longer(cols = c(WT, FL), names_to = "strain", values_to = "count")
 
-head(alterEventCount)
 alterEventCount %>% ggplot(aes(x = event, y = count, fill = strain)) +
-geom_bar(stat = "identity", position = "dodge") +
+    geom_bar(stat = "identity", position = "dodge") +
     theme_bw() +
     xlab("Event") +
     ylab("Number of events") +
     ggtitle("Number of events with circadian pattern in WT and FL")
 
 ggsave("figure/alter/alterEventCount.pdf", width = 6, height = 4)
+
+## 合并事件
+merge_WT_exp <- rbind(A3SS_WT_cycle_exp, A5SS_WT_cycle_exp, RI_WT_cycle_exp, SE_WT_cycle_exp) %>%
+    column_to_rownames("GeneID")
+pheatmap(
+    merge_WT_exp,
+    cluster_cols = FALSE,
+    cluster_rows = FALSE,
+    show_rownames = FALSE,
+    gaps_row = c(length(A3SS_WT_cycle_genes), length(A5SS_WT_cycle_genes), length(RI_WT_cycle_genes), length(SE_WT_cycle_genes)),
+    scale = "row",
+    main = "WT, N = 1,165",
+    filename = "figure/alter/merge_WT_cycle_exp.pdf"
+)
+
+merge_FL_exp <- rbind(A3SS_FL_cycle_exp, A5SS_FL_cycle_exp, RI_FL_cycle_exp, SE_FL_cycle_exp) %>%
+    column_to_rownames("GeneID")
+
+library(ComplexHeatmap)
+dend <- cluster_within_group(t(as.matrix(merge_WT_exp)), rep(
+    c("A3SS", "A5SS", "RI", "SE"),
+    c(length(A3SS_WT_cycle_genes), length(A5SS_WT_cycle_genes), length(RI_WT_cycle_genes), length(SE_WT_cycle_genes))
+))
+
+# library(circlize)
+
+col_anno <- HeatmapAnnotation(ZT = rep(rep(c("light", "night"), c(4, 2)), 3), col = list(ZT = c("light" = "grey", "night" = "black")))
+
+pdf("figure/alter/complex_merge_WT_cycle_exp.pdf")
+ht <- Heatmap(t(scale(t(as.matrix(merge_WT_exp)))),
+    cluster_columns = FALSE,
+    row_split = c(rep("A3SS", length(A3SS_WT_cycle_genes)), rep("A5SS", length(A5SS_WT_cycle_genes)), rep("RI", length(RI_WT_cycle_genes)), rep("SE", length(SE_WT_cycle_genes))),
+    show_row_names = FALSE,
+    top_annotation = col_anno,
+    gap = unit(5, "mm"),
+    name = "WT Proportion"
+    # cluster_rows = dend,
+    # row_split = 4
+)
+top_annotation <- draw(ht)
+dev.off()
+
+pdf("figure/alter/complex_merge_FL_cycle_exp.pdf")
+ht <- Heatmap(t(scale(t(as.matrix(merge_FL_exp)))),
+    cluster_columns = FALSE,
+    row_split = c(rep("A3SS", length(A3SS_FL_cycle_genes)), rep("A5SS", length(A5SS_FL_cycle_genes)), rep("RI", length(RI_FL_cycle_genes)), rep("SE", length(SE_FL_cycle_genes))),
+    show_row_names = FALSE,
+    top_annotation = col_anno,
+    gap = unit(5, "mm"),
+    name = "FL Proportion"
+    # cluster_rows = dend,
+    # row_split = 4
+)
+top_annotation <- draw(ht)
+dev.off()
+
+
+# select row by row order
+# sort(row_order(ht)$A3SS)
