@@ -156,9 +156,21 @@ pheatmap(
     filename = "figure/alter/SE_WT_FL_cycle_exp.pdf"
 )
 
-## 统计所有事件比例以及cycle事件比例
+## 统计cycle事件比例
 
 alterEventCount <- tibble(
     event = c("A3SS", "A5SS", "MXE", "RI", "SE"),
-    WT_all = c(nrow(rMATs_merge_A3SS_WT_exp_NaRemoved), nrow(rMATs_merge_A5SS_WT_exp_NaRemoved), nrow(rMATs_merge_MXE_WT_exp_NaRemoved), nrow(rMATs_merge_RI_WT_exp_NaRemoved), nrow(rMATs_merge_SE_WT_exp_NaRemoved)),
-)
+    WT = c(length(A3SS_WT_cycle_genes), length(A5SS_WT_cycle_genes), length(MXE_WT_cycle_genes), length(RI_WT_cycle_genes), length(SE_WT_cycle_genes)),
+    FL = c(length(A3SS_FL_cycle_genes), length(A5SS_FL_cycle_genes), length(MXE_FL_cycle_genes), length(RI_FL_cycle_genes), length(SE_FL_cycle_genes))
+) %>% 
+pivot_longer(cols = c(WT, FL), names_to = "strain", values_to = "count")
+
+head(alterEventCount)
+alterEventCount %>% ggplot(aes(x = event, y = count, fill = strain)) +
+geom_bar(stat = "identity", position = "dodge") +
+    theme_bw() +
+    xlab("Event") +
+    ylab("Number of events") +
+    ggtitle("Number of events with circadian pattern in WT and FL")
+
+ggsave("figure/alter/alterEventCount.pdf", width = 6, height = 4)
