@@ -9,7 +9,7 @@ library(clusterProfiler)
 # AnnotationDbi::keys(GossypiumDB, "SYMBOL")[1:10]
 
 # 构建对照表
-library(dplyr)
+library(tidyverse)
 library(readxl)
 genes2Go <- read_excel("../bla_go/genes2Go.xlsx",
     col_names = T, skip = 1
@@ -121,3 +121,92 @@ enrichplot::upsetplot(enresult_WT_FL_specific_circGenes_BP, categorySize="pvalue
 
 # testTerm <- enresult_WT_FL_specific_circGenes_BP$Description[1:5]
 # enrichplot::pmcplot(enresult_WT_FL_specific_circGenes_BP$Description[1:5], 2010:2022)
+
+
+## 剪接事件富集分析
+### A3SS WT FL
+A3SS_WT_genes <- read_lines("mediumDataSave/cycleGenes/A3SS_WT_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+A3SS_FL_genes <- read_lines("mediumDataSave/cycleGenes/A3SS_FL_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+enresult_A3SS_WT_genes_BP <- enricher(A3SS_WT_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_A3SS_WT_genes_BP, showCategory = 20) + ggtitle("A3SS_WT_genes_BP")
+ggsave("figure/enrichRes/enresult_A3SS_WT_genes_BP.pdf")
+
+enresult_A3SS_FL_genes_BP <- enricher(A3SS_FL_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_A3SS_FL_genes_BP, showCategory = 20) + ggtitle("A3SS_FL_genes_BP")
+ggsave("figure/enrichRes/enresult_A3SS_FL_genes_BP.pdf")
+### A5SS WT FL
+A5SS_WT_genes <- read_lines("mediumDataSave/cycleGenes/A5SS_WT_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+A5SS_FL_genes <- read_lines("mediumDataSave/cycleGenes/A5SS_FL_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+
+enresult_A5SS_WT_genes_BP <- enricher(A5SS_WT_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_A5SS_WT_genes_BP, showCategory = 20) + ggtitle("A5SS_WT_genes_BP")
+ggsave("figure/enrichRes/enresult_A5SS_WT_genes_BP.pdf")
+
+enresult_A5SS_FL_genes_BP <- enricher(A5SS_FL_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_A5SS_FL_genes_BP, showCategory = 20) + ggtitle("A5SS_FL_genes_BP")
+ggsave("figure/enrichRes/enresult_A5SS_FL_genes_BP.pdf")
+### MXE WT FL
+MXE_WT_genes <- read_lines("mediumDataSave/cycleGenes/MXE_WT_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+MXE_FL_genes <- read_lines("mediumDataSave/cycleGenes/MXE_FL_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+### RI WT FL
+RI_WT_genes <- read_lines("mediumDataSave/cycleGenes/RI_WT_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+RI_FL_genes <- read_lines("mediumDataSave/cycleGenes/RI_FL_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+
+enresult_RI_WT_genes_BP <- enricher(RI_WT_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_RI_WT_genes_BP, showCategory = 20) + ggtitle("RI_WT_genes_BP")
+ggsave("figure/enrichRes/enresult_RI_WT_genes_BP.pdf")
+
+enresult_RI_FL_genes_BP <- enricher(RI_FL_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_RI_FL_genes_BP, showCategory = 20) + ggtitle("RI_FL_genes_BP")
+ggsave("figure/enrichRes/enresult_RI_FL_genes_BP.pdf")
+### SE WT FL
+SE_WT_genes <- read_lines("mediumDataSave/cycleGenes/SE_WT_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+SE_FL_genes <- read_lines("mediumDataSave/cycleGenes/SE_FL_cycle_genes.txt") %>% map_chr(~str_split(., "_\\d+$", n = 2)[[1]][1])
+
+enresult_SE_WT_genes_BP <- enricher(SE_WT_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_SE_WT_genes_BP, showCategory = 20) + ggtitle("SE_WT_genes_BP")
+ggsave("figure/enrichRes/enresult_SE_WT_genes_BP.pdf")
+
+enresult_SE_FL_genes_BP <- enricher(SE_FL_genes,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+dotplot(enresult_SE_FL_genes_BP, showCategory = 20) + ggtitle("SE_FL_genes_BP")
+ggsave("figure/enrichRes/enresult_SE_FL_genes_BP.pdf")
