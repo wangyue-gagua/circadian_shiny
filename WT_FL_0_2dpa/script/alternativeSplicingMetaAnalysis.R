@@ -6,6 +6,7 @@ rMATs_merge_A3SS_WT_META2d <- read_csv("METACYCLE/rMATs_merge_A3SS_WT_META2d/met
 A3SS_WT_cycle_genes <- rMATs_merge_A3SS_WT_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(A3SS_WT_cycle_genes, "mediumDataSave/cycleGenes/A3SS_WT_cycle_genes.txt") # 存储基因集合
 rMATs_merge_A3SS_WT_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_A3SS_WT_exp.csv")
 A3SS_WT_cycle_exp <- rMATs_merge_A3SS_WT_exp_NaRemoved %>% filter(GeneID %in% A3SS_WT_cycle_genes)
 
@@ -14,6 +15,7 @@ rMATs_merge_A3SS_FL_META2d <- read_csv("METACYCLE/rMATs_merge_A3SS_FL_META2d/met
 A3SS_FL_cycle_genes <- rMATs_merge_A3SS_FL_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(A3SS_FL_cycle_genes, "mediumDataSave/cycleGenes/A3SS_FL_cycle_genes.txt") # 存储基因集合
 rMATs_merge_A3SS_FL_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_A3SS_FL_exp.csv")
 A3SS_FL_cycle_exp <- rMATs_merge_A3SS_FL_exp_NaRemoved %>% filter(GeneID %in% A3SS_FL_cycle_genes)
 
@@ -37,6 +39,7 @@ rMATs_merge_A5SS_WT_META2d <- read_csv("METACYCLE/rMATs_merge_A5SS_WT_META2d/met
 A5SS_WT_cycle_genes <- rMATs_merge_A5SS_WT_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(A5SS_WT_cycle_genes, "mediumDataSave/cycleGenes/A5SS_WT_cycle_genes.txt")
 rMATs_merge_A5SS_WT_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_A5SS_WT_exp.csv")
 A5SS_WT_cycle_exp <- rMATs_merge_A5SS_WT_exp_NaRemoved %>% filter(GeneID %in% A5SS_WT_cycle_genes)
 
@@ -45,6 +48,7 @@ rMATs_merge_A5SS_FL_META2d <- read_csv("METACYCLE/rMATs_merge_A5SS_FL_META2d/met
 A5SS_FL_cycle_genes <- rMATs_merge_A5SS_FL_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(A5SS_FL_cycle_genes, "mediumDataSave/cycleGenes/A5SS_FL_cycle_genes.txt")
 rMATs_merge_A5SS_FL_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_A5SS_FL_exp.csv")
 A5SS_FL_cycle_exp <- rMATs_merge_A5SS_FL_exp_NaRemoved %>% filter(GeneID %in% A5SS_FL_cycle_genes)
 
@@ -68,6 +72,7 @@ rMATs_merge_MXE_WT_META2d <- read_csv("METACYCLE/rMATs_merge_MXE_WT_META2d/meta2
 MXE_WT_cycle_genes <- rMATs_merge_MXE_WT_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(MXE_WT_cycle_genes, "mediumDataSave/cycleGenes/MXE_WT_cycle_genes.txt")
 rMATs_merge_MXE_WT_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_MXE_WT_exp.csv")
 MXE_WT_cycle_exp <- rMATs_merge_MXE_WT_exp_NaRemoved %>% filter(GeneID %in% MXE_WT_cycle_genes)
 
@@ -76,6 +81,7 @@ rMATs_merge_MXE_FL_META2d <- read_csv("METACYCLE/rMATs_merge_MXE_FL_META2d/meta2
 MXE_FL_cycle_genes <- rMATs_merge_MXE_FL_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(MXE_FL_cycle_genes, "mediumDataSave/cycleGenes/MXE_FL_cycle_genes.txt")
 rMATs_merge_MXE_FL_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_MXE_FL_exp.csv")
 MXE_FL_cycle_exp <- rMATs_merge_MXE_FL_exp_NaRemoved %>% filter(GeneID %in% MXE_FL_cycle_genes)
 
@@ -99,6 +105,7 @@ rMATs_merge_RI_WT_META2d <- read_csv("METACYCLE/rMATs_merge_RI_WT_META2d/meta2d_
 RI_WT_cycle_genes <- rMATs_merge_RI_WT_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(RI_WT_cycle_genes, "mediumDataSave/cycleGenes/RI_WT_cycle_genes.txt")
 rMATs_merge_RI_WT_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_RI_WT_exp.csv")
 RI_WT_cycle_exp <- rMATs_merge_RI_WT_exp_NaRemoved %>% filter(GeneID %in% RI_WT_cycle_genes)
 
@@ -107,6 +114,7 @@ rMATs_merge_RI_FL_META2d <- read_csv("METACYCLE/rMATs_merge_RI_FL_META2d/meta2d_
 RI_FL_cycle_genes <- rMATs_merge_RI_FL_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(RI_FL_cycle_genes, "mediumDataSave/cycleGenes/RI_FL_cycle_genes.txt")
 rMATs_merge_RI_FL_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_RI_FL_exp.csv")
 RI_FL_cycle_exp <- rMATs_merge_RI_FL_exp_NaRemoved %>% filter(GeneID %in% RI_FL_cycle_genes)
 
@@ -130,6 +138,7 @@ rMATs_merge_SE_WT_META2d <- read_csv("METACYCLE/rMATs_merge_SE_WT_META2d/meta2d_
 SE_WT_cycle_genes <- rMATs_merge_SE_WT_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(SE_WT_cycle_genes, "mediumDataSave/cycleGenes/SE_WT_cycle_genes.txt")
 rMATs_merge_SE_WT_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_SE_WT_exp.csv")
 SE_WT_cycle_exp <- rMATs_merge_SE_WT_exp_NaRemoved %>% filter(GeneID %in% SE_WT_cycle_genes)
 
@@ -138,6 +147,7 @@ rMATs_merge_SE_FL_META2d <- read_csv("METACYCLE/rMATs_merge_SE_FL_META2d/meta2d_
 SE_FL_cycle_genes <- rMATs_merge_SE_FL_META2d %>%
     filter(meta2d_BH.Q < 0.01) %>%
     pull(CycID)
+write_lines(SE_FL_cycle_genes, "mediumDataSave/cycleGenes/SE_FL_cycle_genes.txt")
 rMATs_merge_SE_FL_exp_NaRemoved <- read_csv("./mediumDataSave/removeNaMeta/rMATs_merge_SE_FL_exp.csv")
 SE_FL_cycle_exp <- rMATs_merge_SE_FL_exp_NaRemoved %>% filter(GeneID %in% SE_FL_cycle_genes)
 
