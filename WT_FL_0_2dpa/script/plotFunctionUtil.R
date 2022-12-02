@@ -105,43 +105,43 @@ my_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias = NULL) {
 metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp <- salmon_WT_FL_0_2day_TMM_sample_exp %>% select(1:6)
 
 salmonPlotRepCirca <- function(str, alia_name = "") {
-  df <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp[str])
-  colnames(df)[7] <- "measure"
+    df <- cbind(metaInfo_salmon_WT_FL_0_2day_TMM_sample_exp, measure = salmon_WT_FL_0_2day_TMM_sample_exp[str])
+    colnames(df)[7] <- "measure"
 
 
-  rects <-
-    data.frame(
-      xstart = c(14.5, 38.5, 62.5),
-      xend = c(23, 47, 71)
-    )
-  ggplot(data = df, aes(time, measure)) +
-    geom_point(aes(col = strain)) +
-    geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
-    facet_wrap(~replicate, nrow = 2) +
-    scale_x_continuous(breaks = seq(1, 69, 4)) +
-    geom_rect(
-      data = rects,
-      aes(
-        xmin = xstart,
-        xmax = xend,
-        ymin = 0,
-        ymax = Inf
-      ),
-      inherit.aes = FALSE,
-      alpha = 0.2
-    ) +
-    labs(title = str, subtitle = alia_name) +
-    ylab("expression level (TMM)") +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+    rects <-
+        data.frame(
+            xstart = c(14.5, 38.5, 62.5),
+            xend = c(23, 47, 71)
+        )
+    ggplot(data = df, aes(time, measure)) +
+        geom_point(aes(col = strain)) +
+        geom_smooth(aes(group = interaction(as.factor(replicate), strain), color = strain), span = 0.3) +
+        facet_wrap(~replicate, nrow = 2) +
+        scale_x_continuous(breaks = seq(1, 69, 4)) +
+        geom_rect(
+            data = rects,
+            aes(
+                xmin = xstart,
+                xmax = xend,
+                ymin = 0,
+                ymax = Inf
+            ),
+            inherit.aes = FALSE,
+            alpha = 0.2
+        ) +
+        labs(title = str, subtitle = alia_name) +
+        ylab("expression level (TMM)") +
+        theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 }
 library(grid)
 salmon_grid_plot_WT_FL_0_2dpa <- function(a_chr_list, alias = NULL) {
-  ## input a id list and a gene name, output a grid plot
-  gobs <- map(a_chr_list, salmonPlotRepCirca, alias)
-  new_gobs <- map(gobs[seq_along(gobs)], `+`, theme(axis.title.x = element_blank(), axis.text.x = element_blank()))
-  new_gobs[-1] <- gobs[-1]
+    ## input a id list and a gene name, output a grid plot
+    gobs <- map(a_chr_list, salmonPlotRepCirca, alias)
+    new_gobs <- map(gobs[seq_along(gobs)], `+`, theme(axis.title.x = element_blank(), axis.text.x = element_blank()))
+    new_gobs[-1] <- gobs[-1]
 
-  gridExtra::grid.arrange(grobs = new_gobs)
+    gridExtra::grid.arrange(grobs = new_gobs)
 }
 
 
@@ -173,4 +173,28 @@ plotRepCircaDetrended <- function(str, alia_name = NULL) {
         labs(title = str, subtitle = alia_name) +
         ylab("Detrended relative expression") +
         theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
+}
+
+# 火山图
+deResVolcano <- function(deRes, titles) {
+    quantiles <- quantile(deRes$log2FoldChange, c(0.0001, 0.5, 0.9999))
+    maxPerdown <- quantiles[[1]]
+    maxPerup <- quantiles[[3]]
+    numberDown <- sum(deRes$change == "down")
+    numberUp <- sum(deRes$change == "up")
+    deRes %>%
+        mutate(textture = ifelse(log2FoldChange <= maxPerdown | log2FoldChange > maxPerup, Geneid, "")) %>%
+        ggplot(aes(x = log2FoldChange, y = -log10(padj), color = change)) +
+        geom_point(alpha = 0.4) +
+        scale_color_manual(values = c("up" = "#ff4757", "down" = "#546de5", "ns" = "#d2dae2")) +
+        geom_vline(xintercept = c(-1, 1), lty = 4, col = "black", lwd = 0.8) +
+        geom_hline(yintercept = -log10(padjCutOff), lty = 4, col = "black", lwd = 0.8) +
+        geom_label_repel(aes(label = textture),
+            size = 3, box.padding = unit(0.5, "lines"),
+            point.padding = unit(0.8, "lines"),
+            segment.color = "black",
+            show.legend = FALSE
+        ) +
+        labs(title = titles, subtitle = str_c("Down: ", numberDown, " Up: ", numberUp)) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
