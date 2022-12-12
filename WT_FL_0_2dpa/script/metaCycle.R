@@ -4,8 +4,7 @@ setwd("WT_FL_0_2dpa")
 library(tidyverse)
 library(data.table)
 # WT_FL_0_2day_TMM_sample_exp <- read_csv("../merged_counts/WT_FL_0_2day_TMM_sample_exp.csv")
-WT_FL_0_2day_TMM_sample_exp <- fread("../merged_counts/WT_FL_0_2day_TMM_sample_exp.csv")
-WT_FL_0_2day_TMM_sample_exp <- WT_FL_0_2day_TMM_sample_exp %>% as_tibble()
+WT_FL_0_2day_TMM_sample_exp <- data.table::fread("../merged_counts/WT_FL_0_2day_TMM_sample_exp.csv") %>% as_tibble()
 
 WT_FL_0_2day_genes_TMM_EXPR <- read_delim("../merged_counts/WT_FL_0_2day_genes.TMM.EXPR.matrix",
   delim = "\t", escape_double = FALSE,
