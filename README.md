@@ -29,3 +29,18 @@
 新增了tool页面用于提供不同版本基因组之间的ID转换，暂时只提供G. hirsutum 中**WHU v1**基因组转**HAU v1**以及**ZJU v2.1**转**HAU v1**的功能。
 - [ ] 提供更多基因组版本以供选择
 - [ ] 整合不同版本基因组与拟南芥同于比对的数据
+
+### 2022/12/13
+升级R4.1后出现
+```
+Warning: Error in <Anonymous>: 图形API版本不相符
+  129: <Anonymous>
+  127: startPNG
+  126: drawPlot
+  112: <reactive:plotObj>
+   96: drawReactive
+   83: renderFunc
+   82: output$plots-circa_plot_fine_interval
+    1: shiny::runApp
+```
+发现由于`shiny::plotPNG`首先使用`ragg`作为图形设备，`install.packages('ragg')`后可正常使用。
