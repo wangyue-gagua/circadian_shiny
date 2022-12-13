@@ -140,10 +140,9 @@ FL_circ_genes_detrended <- FL_dat_detrended$CycID
 WT_circ_genes_specific_detrended <- setdiff(WT_circ_genes_detrended, FL_circ_genes_detrended)
 FL_circ_genes_specific_detrended <- setdiff(FL_circ_genes_detrended, WT_circ_genes_detrended)
 WT_FL_circ_genes_common_detrended <- intersect(WT_circ_genes_detrended, FL_circ_genes_detrended)
-writeLines(WT_circ_genes_specific_detrended, "mediumDataSave/WT_circ_genes_specific_detrended.txt")
-writeLines(FL_circ_genes_specific_detrended, "mediumDataSave/FL_circ_genes_specific_detrended.txt")
-writeLines(WT_FL_circ_genes_common_detrended, "mediumDataSave/WT_FL_circ_genes_common_detrended.txt")
-
+writeLines(WT_circ_genes_specific_detrended, "mediumDataSave/WT_circ_genes_specific_detrended.txt") # 3441
+writeLines(FL_circ_genes_specific_detrended, "mediumDataSave/FL_circ_genes_specific_detrended.txt") # 4965
+writeLines(WT_FL_circ_genes_common_detrended, "mediumDataSave/WT_FL_circ_genes_common_detrended.txt") # 3370
 library(VennDiagram)
 venn.diagram(
     x = list(
