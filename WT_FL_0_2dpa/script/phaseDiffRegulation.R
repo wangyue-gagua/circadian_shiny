@@ -16,7 +16,9 @@ GhirAliasLevelTbl <- tibble(
     cascadeLevel = c("L1", "L1", "L1", "L2", "L3", "L3", "L3", "L4", "L4")
 )
 myb25CascadeGenes_df <- myb25CascadeGenes_df %>%
-    left_join(GhirAliasLevelTbl, by = "GhirAlias")
+    left_join(GhirAliasLevelTbl, by = "GhirAlias") %>% 
+    bind_rows(c(gene = "Ghir_A05G039070", GhirAlias = "PDF1", AtAlias = "PDF1", cascadeLevel = "L1"), 
+    c(gene = "Ghir_D04G004030", GhirAlias = "PDF1", AtAlias = "PDF1", cascadeLevel = "L1"))
 head(myb25CascadeGenes_df)
 myb25CascadeGeneList <- myb25CascadeGenes_df$gene
 myb25CascadeGenesMtx <- WT_FL_0_2day_TMM_sample_exp %>%
@@ -51,7 +53,7 @@ WD40_ExpA1_cascading_regulation <- myb25CascadeGenesMtx %>%
     ylab("relative expression/(TMM)") +
     facet_grid(
         cascadeLevel + factor(GhirAlias,
-            levels = c("WD40", "GhMYB2", "GhGL2", "GhMYB25-like", "GhMYB25", "GhHD-1", "GhHOX3-RT-F", "GhEXPASIN_A1", "GhLGO")
+            levels = c("WD40", "GhMYB2", "PDF1", "GhGL2", "GhMYB25-like", "GhMYB25", "GhHD-1", "GhHOX3-RT-F", "GhEXPASIN_A1", "GhLGO")
         ) ~ replicate,
         scales = "free_y"
     ) +
