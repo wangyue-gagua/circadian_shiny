@@ -76,6 +76,75 @@ second_count_matrix_longer_pdf <- second_count_matrix_longer %>% ggplot(aes(x = 
 
 ggsave("figure/geneExpDiff/second_count_matrix_longer.pdf", second_count_matrix_longer_pdf, width = 20, height = 4)
 
+# 统计每个时期中count数大于3的基因数目
+second_detected_geneCnt <- second_count_matrix %>%
+    summarise(across(.cols = where(is.numeric), .fns = ~ sum(. > 3))) %>%
+    pivot_longer(cols = everything(), names_to = "samples", values_to = "count") %>%
+    left_join(metaInfo_WT_FL_0_2day_TMM_sample_exp, by = c("samples" = "sample"))
+
+second_detected_geneCnt %>% ggplot(aes(x = time, y = count, group = strain)) +
+    geom_point(aes(color = strain), size = 2) +
+    geom_line(aes(color = strain), size = 1) +
+    ggrepel::geom_text_repel(aes(label = paste0("n = ", count)), size = 2) +
+    scale_x_continuous(breaks = seq(1, 69, 4), ) +
+    geom_rect(
+        data = rects,
+        aes(
+            xmin = xstart,
+            xmax = xend,
+            ymin = 47000,
+            ymax = 50000
+        ),
+        inherit.aes = FALSE,
+        alpha = 0.2
+    ) +
+    labs(title = "Second sequencing detected gene counts") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    # 放大y轴40000- 50000部分
+    scale_y_continuous(limits = c(47000, 50000)) +
+    facet_grid(replicate ~ .)
+
+ggsave("figure/geneExpDiff/second_detected_geneCnt.pdf")
+
+
+# 读取multiqc中STAR比对结果，比较样品的测序深度。制表符分隔，保留header
+
+second_multiqc_STAR_path <- "/data1/wangy/circadian/multiqc_featureCounts_STAR/reports_data/multiqc_featureCounts.txt"
+
+second_multiqc_STAR <- read_tsv(second_multiqc_STAR_path, col_names = T) %>%
+    select(Sample, Total, Assigned)
+
+second_multiqc_STAR_meta <- second_multiqc_STAR %>%
+    left_join(metaInfo_WT_FL_0_2day_TMM_sample_exp, by = c("Sample" = "sample"))
+
+second_multiqc_STAR_meta %>% ggplot(aes(x = time, y = Assigned, group = strain)) +
+    geom_point(aes(color = strain), size = 2) +
+    geom_line(aes(color = strain), size = 1) +
+    ggrepel::geom_text_repel(aes(label = paste0("n = ", Assigned)), size = 2) +
+    scale_x_continuous(breaks = seq(1, 69, 4), ) +
+    labs(title = "Second sequencing assigned reads") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    facet_grid(replicate ~ .)
+
+ggsave("figure/geneExpDiff/second_multiqc_STAR_meta.pdf")
+
+## 2d散点图验证基因数目的变化与测序深度的变化是否一致。通过ggpubr stat_cor添加pearson相关系数
+second_cnt_depth <- left_join(second_detected_geneCnt, second_multiqc_STAR_meta,
+    by = c("samples" = "Sample", "time" = "time", "strain" = "strain", "replicate" = "replicate", "period" = "period", "labs" = "labs")
+)
+
+second_cnt_depth %>% ggplot(aes(x = log10(Assigned), y = count)) +
+    geom_point(size = 2) +
+    ggpubr::stat_cor(method = "spearman", label.x = 0.5, label.y = 0.5, label.size = 3) +
+    labs(title = "Second sequencing detected gene counts vs assigned reads") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    facet_grid(replicate ~ .)
+
+ggsave("figure/geneExpDiff/second_cnt_depth.pdf")
+
+head(second_cnt_depth)
+head(second_multiqc_STAR_meta)
+
 library(ggplot2)
 library(DESeq2)
 library(ggrepel)
