@@ -20,6 +20,8 @@ FL_0_2day_genes_TMM_EXPR <- WT_FL_0_2day_genes_TMM_EXPR %>%
 WT_0_2day_genes_TMM_EXPR_mergeRep <- WT_0_2day_genes_TMM_EXPR
 FL_0_2day_genes_TMM_EXPR_mergeRep <- FL_0_2day_genes_TMM_EXPR
 
+## 多加利用
+metaInfo_WT_FL_0_2day_TMM_sample_exp <- WT_FL_0_2day_TMM_sample_exp %>% select(1:6)
 
 sample_list <- WT_FL_0_2day_TMM_sample_exp %>%
   group_by(strain) %>%
@@ -459,7 +461,6 @@ set.seed(42)
 # 合并FL和WT的meta2d结果，并通过circacompare添加mesor和amplitude以及phase的差异和p值
 FL_WT_meta2d <- left_join(FL_meta2d, WT_meta2d, by = "CycID", suffix = c("_FL", "_WT"))
 
-metaInfo_WT_FL_0_2day_TMM_sample_exp <- WT_FL_0_2day_TMM_sample_exp %>% select(1:6)
 
 # 首先筛选出节律基因，避免模型不收敛
 FL_WT_meta2d_circa <- FL_WT_meta2d %>%
