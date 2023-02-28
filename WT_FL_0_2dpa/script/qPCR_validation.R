@@ -296,3 +296,40 @@ PHD1_SCF_qPCR_tbl_quant %>%
     theme_bw()
 
 ggsave("figure/qPCR_validation/PHD1_SCF_qPCR.pdf")
+
+# PCR validation PHD1 with SCF as ref gene / repeat experiment
+PHD1_SCF_Rep_path <- "qPCR_rawData/PHD1_SCFUBQ_REP2.xlsx"
+PHD1_SCF_Rep_tbl <- readxl::read_excel(PHD1_SCF_Rep_path)
+
+PHD1_SCF_Rep_tbl_cq <- PHD1_SCF_Rep_tbl %>%
+    mutate(Sample = toupper(Sample)) %>%
+    select(Sample, Target, Cq) %>%
+    mutate(
+        strain = toupper(str_split_i(Sample, "_", 1)),
+        day = str_split_i(Sample, "_", 2),
+        phase = str_split_i(Sample, "_", 3),
+        rep = rep(c(1, 2, 3), length(PHD1_SCF_Rep_tbl$Sample) / 3)
+    ) %>%
+    pivot_wider(names_from = Target, values_from = Cq) %>%
+    mutate(deltaCq = PHD1 - SCF_UBQ)
+
+PHD1_SCF_Rep_controlList <- rep(PHD1_SCF_Rep_tbl_cq$deltaCq[1:3], length(PHD1_SCF_Rep_tbl_cq$deltaCq) / 3)
+
+PHD1_SCF_Rep_qPCR_tbl_quant <- PHD1_SCF_Rep_tbl_cq %>%
+    mutate(
+        deDeltaCq = deltaCq - PHD1_SCF_Rep_controlList,
+        quant = 2^(-deDeltaCq)
+    ) %>%
+    group_by(Sample, strain, day, phase) %>%
+    summarise(means = mean(quant, na.rm = TRUE), sd = sd(quant, na.rm = TRUE)) %>%
+    mutate(timeString = str_c(day, "Dpa", phase))
+
+PHD1_SCF_Rep_qPCR_tbl_quant %>%
+    ggplot(aes(x = timeString, y = means, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = means - sd, ymax = means + sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "PHD1 Relative Expression PHD1/SCF") +
+    theme_bw()
+
+ggsave("figure/qPCR_validation/PHD1_SCF_qPCR_Rep.pdf")
