@@ -333,3 +333,73 @@ PHD1_SCF_Rep_qPCR_tbl_quant %>%
     theme_bw()
 
 ggsave("figure/qPCR_validation/PHD1_SCF_qPCR_Rep.pdf")
+
+# PCR validation PHD1 with SCF as ref gene / repeat 2 experiment
+PHD1_SCFUBQ_REP3_with_PRR5_path <- "qPCR_rawData/PHD1_SCFUBQ_REP3_with_PRR5.xlsx"
+PHD1_SCFUBQ_REP3_with_PRR5_tbl <- readxl::read_excel(PHD1_SCFUBQ_REP3_with_PRR5_path) %>% 
+    mutate(Sample = toupper(Sample)) %>%
+    mutate(
+        strain = toupper(str_split_i(Sample, "_", 1)),
+        day = str_split_i(Sample, "_", 2),
+        phase = str_split_i(Sample, "_", 3),
+    )
+
+# 拆分PHD1与PRR5
+PHD1_SCFUBQ_REP3 <- PHD1_SCFUBQ_REP3_with_PRR5_tbl %>%
+        filter(day == 1) %>% 
+        select(Sample, Target, Cq, strain, day, phase)
+with_PRR5 <- PHD1_SCFUBQ_REP3_with_PRR5_tbl %>%
+        filter(day == 0) %>% 
+        select(Sample, Target, Cq, strain, day, phase)
+
+PHD1_SCFUBQ_REP3_cq <- PHD1_SCFUBQ_REP3 %>%
+    mutate(
+        rep = rep(c(1, 2, 3), length(PHD1_SCFUBQ_REP3$Sample) / 3)
+    ) %>%
+    pivot_wider(names_from = Target, values_from = Cq) %>%
+    mutate(deltaCq = PHD1 - SCF_UBQ)
+
+PHD1_SCFUBQ_REP3_controlList <- rep(PHD1_SCFUBQ_REP3_cq$deltaCq[1:3], length(PHD1_SCFUBQ_REP3_cq$deltaCq) / 3)
+PHD1_SCFUBQ_REP3_quant <- PHD1_SCFUBQ_REP3_cq %>%
+    mutate(
+        deDeltaCq = deltaCq - PHD1_SCFUBQ_REP3_controlList,
+        quant = 2^(-deDeltaCq)
+    ) %>%
+    group_by(Sample, strain, day, phase) %>%
+    summarise(means = mean(quant, na.rm = TRUE), sd = sd(quant, na.rm = TRUE)) %>%
+    mutate(timeString = str_c(day, "Dpa", phase))
+
+PHD1_SCFUBQ_REP3_quant %>%
+    ggplot(aes(x = timeString, y = means, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = means - sd, ymax = means + sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "PHD1 Relative Expression PHD1/SCF") +
+    theme_bw()
+
+ggsave("figure/qPCR_validation/PHD1_SCF_qPCR_Rep3.pdf")
+
+with_PRR5_cq <- with_PRR5 %>% 
+    mutate(
+        rep = rep(c(1, 2), length(with_PRR5$Sample) / 2)
+    ) %>%
+    pivot_wider(names_from = Target, values_from = Cq) %>%
+    mutate(deltaCq = PRR5 - SCF_UBQ)
+
+with_PRR5_controlList <- rep(with_PRR5_cq$deltaCq[1:2], length(with_PRR5_cq$deltaCq) / 2)
+with_PRR5_quant <- with_PRR5_cq %>%
+    mutate(
+        deDeltaCq = deltaCq - with_PRR5_controlList,
+        quant = 2^(-deDeltaCq)
+    ) %>%
+    group_by(Sample, strain, day, phase) %>%
+    summarise(means = mean(quant, na.rm = TRUE), sd = sd(quant, na.rm = TRUE)) %>%
+    mutate(timeString = str_c(day, "Dpa", phase))
+with_PRR5_quant %>% 
+    ggplot(aes(x = timeString, y = means, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = means - sd, ymax = means + sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "PRR5 Relative Expression PRR5/SCF") +
+    theme_bw()
+ggsave("figure/qPCR_validation/PRR5_SCF_qPCR_Rep3.pdf")
