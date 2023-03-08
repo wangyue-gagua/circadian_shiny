@@ -403,3 +403,111 @@ with_PRR5_quant %>%
     labs(x = "Time", y = "Relative Expression", title = "PRR5 Relative Expression PRR5/SCF") +
     theme_bw()
 ggsave("figure/qPCR_validation/PRR5_SCF_qPCR_Rep3.pdf")
+
+# 新一批qPCR 1个周期，每个时间点2次重复  
+# FL_1_N 引物：PHD1 PHD2 SFCU
+# FL_0_N 引物：CCA1 PRR9 SFCU
+
+# 读取数据
+FL_1_0_N_path <- "qPCR_rawData/PHD1_PHD2_CCA1_PRR9_SCFU_FL0AND1PERIOD.xlsx"
+FL_1_0_N_tbl <- readxl::read_excel(FL_1_0_N_path) %>% 
+    mutate(Sample = toupper(Sample)) %>%
+    mutate(
+        strain = toupper(str_split_i(Sample, "_", 1)),
+        day = str_split_i(Sample, "_", 2),
+        phase = str_split_i(Sample, "_", 3),
+    )
+
+# 拆分两个周期
+FL_1_N <- FL_1_0_N_tbl %>%
+        filter(day == 1) %>% 
+        select(Sample, Target, Cq, strain, day, phase)
+
+FL_0_N <- FL_1_0_N_tbl %>%
+        filter(day == 0) %>% 
+        select(Sample, Target, Cq, strain, day, phase)
+
+FL_0_N_cq <- FL_0_N %>% 
+    mutate(
+        rep = rep(c(1, 2), length(FL_0_N$Sample) / 2)
+    ) %>%
+    pivot_wider(names_from = Target, values_from = Cq) %>%
+    mutate(CCA1_deltaCq = CCA1 - SCF_UBQ, PRR9_deltaCq = PRR9 - SCF_UBQ)
+
+FL_0_N_controlList <- rep(FL_0_N_cq$CCA1_deltaCq[1:2], length(FL_0_N_cq$CCA1_deltaCq) / 2)
+FL_0_N_quant <- FL_0_N_cq %>%
+    mutate(
+        CCA1_deDeltaCq = CCA1_deltaCq - FL_0_N_controlList,
+        CCA1_quant = 2^(-CCA1_deDeltaCq),
+        PRR9_deDeltaCq = PRR9_deltaCq - FL_0_N_controlList,
+        PRR9_quant = 2^(-PRR9_deDeltaCq)
+    ) %>%
+    group_by(Sample, strain, day, phase) %>%
+    summarise(CCA1_mean = mean(CCA1_quant, na.rm = TRUE),
+     CCA1_sd = sd(CCA1_quant, na.rm = TRUE),
+     PRR9_mean = mean(PRR9_quant, na.rm = TRUE),
+     PRR9_sd = sd(PRR9_quant, na.rm = TRUE)) %>%
+    mutate(timeString = str_c(day, "Dpa", phase))
+
+FL_0_N_quant %>%
+    ggplot(aes(x = timeString, y = CCA1_mean, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = CCA1_mean - CCA1_sd, ymax = CCA1_mean + CCA1_sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "CCA1 Relative Expression CCA1/SCF") +
+    theme_bw()
+
+ggsave("figure/qPCR_validation/CCA1_SCF_qPCR_Period0_1point_NA.pdf")
+
+FL_0_N_quant %>% 
+    ggplot(aes(x = timeString, y = PRR9_mean, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = PRR9_mean - PRR9_sd, ymax = PRR9_mean + PRR9_sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "PRR9 Relative Expression PRR9/SCF") +
+    theme_bw()
+
+ggsave("figure/qPCR_validation/PRR9_SCF_qPCR_Period0_1point_NA.pdf")
+
+## FL_1_N
+FL_1_N_cq <- FL_1_N %>% 
+    mutate(
+        rep = rep(c(1, 2), length(FL_1_N$Sample) / 2)
+    ) %>%
+    pivot_wider(names_from = Target, values_from = Cq) %>%
+    mutate(PHD1_deltaCq = PHD1 - SCF_UBQ, PHD2_deltaCq = PHD2 - SCF_UBQ)
+
+FL_1_N_controlList <- rep(FL_1_N_cq$PHD1_deltaCq[3:4], length(FL_1_N_cq$PHD1_deltaCq) / 2) # 因为第一个时间点数据缺失
+FL_1_N_quant <- FL_1_N_cq %>%
+    mutate(
+        PHD1_deDeltaCq = PHD1_deltaCq - FL_1_N_controlList,
+        PHD1_quant = 2^(-PHD1_deDeltaCq),
+        PHD2_deDeltaCq = PHD2_deltaCq - FL_1_N_controlList,
+        PHD2_quant = 2^(-PHD2_deDeltaCq)
+    ) %>%
+    group_by(Sample, strain, day, phase) %>%
+    summarise(PHD1_mean = mean(PHD1_quant, na.rm = TRUE),
+     PHD1_sd = sd(PHD1_quant, na.rm = TRUE),
+     PHD2_mean = mean(PHD2_quant, na.rm = TRUE),
+     PHD2_sd = sd(PHD2_quant, na.rm = TRUE)) %>%
+    mutate(timeString = str_c(day, "Dpa", phase))
+
+FL_1_N_quant %>%
+    ggplot(aes(x = timeString, y = PHD1_mean, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = PHD1_mean - PHD1_sd, ymax = PHD1_mean + PHD1_sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "PHD1 Relative Expression PHD1/SCF") +
+    theme_bw()
+
+ggsave("figure/qPCR_validation/PHD1_SCF_qPCR_Period1_1point_NA.pdf")
+
+FL_1_N_quant %>%
+    ggplot(aes(x = timeString, y = PHD2_mean, color = strain)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = PHD2_mean - PHD2_sd, ymax = PHD2_mean + PHD2_sd), width = 0.2) +
+    geom_line(aes(group = strain)) +
+    labs(x = "Time", y = "Relative Expression", title = "PHD2 Relative Expression PHD2/SCF") +
+    theme_bw()
+
+ggsave("figure/qPCR_validation/PHD2_SCF_qPCR_Period1_1point_NA.pdf")
