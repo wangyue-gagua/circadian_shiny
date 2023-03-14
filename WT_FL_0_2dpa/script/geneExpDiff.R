@@ -78,7 +78,7 @@ ggsave("figure/geneExpDiff/second_count_matrix_longer.pdf", second_count_matrix_
 
 # 统计每个时期中count数大于3的基因数目
 second_detected_geneCnt <- second_count_matrix %>%
-    summarise(across(.cols = where(is.numeric), .fns = ~ sum(. > 3))) %>%
+    summarise(across(.cols = where(is.numeric), .fns = ~ sum(. > 100))) %>%
     pivot_longer(cols = everything(), names_to = "samples", values_to = "count") %>%
     left_join(metaInfo_WT_FL_0_2day_TMM_sample_exp, by = c("samples" = "sample"))
 
@@ -92,8 +92,8 @@ second_detected_geneCnt %>% ggplot(aes(x = time, y = count, group = strain)) +
         aes(
             xmin = xstart,
             xmax = xend,
-            ymin = 47000,
-            ymax = 50000
+            ymin = 30000,
+            ymax = 34000
         ),
         inherit.aes = FALSE,
         alpha = 0.2
@@ -101,11 +101,12 @@ second_detected_geneCnt %>% ggplot(aes(x = time, y = count, group = strain)) +
     labs(title = "Second sequencing detected gene counts") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     # 放大y轴40000- 50000部分
-    scale_y_continuous(limits = c(47000, 50000)) +
+    scale_y_continuous(limits = c(30000,34000)) +
     facet_grid(replicate ~ .)
 
 ggsave("figure/geneExpDiff/second_detected_geneCnt.pdf")
 
+ggsave("figure/geneExpDiff/second_detected_geneCnt_gt100.pdf")
 
 # 读取multiqc中STAR比对结果，比较样品的测序深度。制表符分隔，保留header
 
