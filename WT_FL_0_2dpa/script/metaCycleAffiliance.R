@@ -52,3 +52,33 @@ pheatmap(
     scale = "row",
     filename = "figure/detrended/WT_FL_both_uncirca_detected_genes_pheatmap.pdf",
 )
+
+# 尝试另一种方法 取第一次测序的数据 5个周期，提取每连续的2个周期数据进行METACYCLE分析
+# 第二次测序数据的3个周期，提取每连续的2个周期数据进行METACYCLE分析
+
+firstSeqAnyUncircaGenes <- readLines("mediumDataSave/firstSeqExp/anyUncircaGenes.txt")
+
+firstSecondAnyUnCirca <- intersect(firstSeqAnyUncircaGenes, WT_FL_both_uncirca_detected_genes)
+# 保存基因列表至临时文件
+# writeLines(firstSecondAnyUnCirca, "mediumDataSave/firstSecondAnyUnCirca.txt")
+firstSecond_count_matrix_WT_FL_both_uncirca_detected_genes <- second_count_matrix %>% 
+    filter(Geneid %in% firstSecondAnyUnCirca) %>% 
+    column_to_rownames("Geneid")
+
+# metacycle.R 中获取annotationSampleTimeTibble
+sampleTimeTibble <- WT_FL_0_2day_TMM_sample_exp %>%
+  select(time, sample, strain) %>%
+  mutate(phase_point = time %% 24) %>% 
+  group_by(strain) %>%
+  arrange(time, .by_group = T)
+annotationSampleTimeTibble <- sampleTimeTibble %>% column_to_rownames(var = "sample") %>% mutate(phase_point = as.factor(phase_point))
+
+pheatmap(
+    firstSecond_count_matrix_WT_FL_both_uncirca_detected_genes,
+    cluster_rows = T,
+    cluster_cols = F,
+    show_rownames = F,
+    scale = "row",
+    annotation_col = annotationSampleTimeTibble,
+    filename = "figure/detrended/firstSecondAnyUnCirca_pheatmap.pdf",
+)
