@@ -210,3 +210,35 @@ enresult_SE_FL_genes_BP <- enricher(SE_FL_genes,
 )
 dotplot(enresult_SE_FL_genes_BP, showCategory = 20) + ggtitle("SE_FL_genes_BP")
 ggsave("figure/enrichRes/enresult_SE_FL_genes_BP.pdf")
+
+# 无节律基因的GO富集分析
+
+firstSecondAnyUnCirca <- readLines("mediumDataSave/firstSecondAnyUnCirca.txt")
+
+firstSecondAnyUnCirca_BP <- enricher(firstSecondAnyUnCirca,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = BP_genes2Go,
+    TERM2NAME = BP_id2desc
+)
+
+dotplot(firstSecondAnyUnCirca_BP, showCategory = 20) + ggtitle("firstSecondAnyUnCirca_BP")
+ggsave("figure/enrichRes/firstSecondAnyUnCirca_BP.pdf")
+
+firstSecondAnyUnCirca_MF <- enricher(firstSecondAnyUnCirca,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = MF_genes2Go,
+    TERM2NAME = MF_id2desc
+)
+dotplot(firstSecondAnyUnCirca_MF, showCategory = 20) + ggtitle("firstSecondAnyUnCirca_MF")
+ggsave("figure/enrichRes/firstSecondAnyUnCirca_MF.pdf")
+
+firstSecondAnyUnCirca_CC <- enricher(firstSecondAnyUnCirca,
+    pvalueCutoff = 0.5,
+    qvalueCutoff = 0.5,
+    TERM2GENE = CC_genes2Go,
+    TERM2NAME = CC_id2desc
+)
+dotplot(firstSecondAnyUnCirca_CC, showCategory = 20) + ggtitle("firstSecondAnyUnCirca_CC")
+ggsave("figure/enrichRes/firstSecondAnyUnCirca_CC.pdf")
