@@ -216,3 +216,18 @@ anyUncircaGenes <- reduce(
 )
 # 将基因列表存入中间文件方便读取
 # writeLines(anyUncircaGenes, "mediumDataSave/firstSeqExp/anyUncircaGenes.txt")
+
+# 读取全局metacycle结果
+WT_minus2_plus2_genes_TMM_EXPR_mergeRep_selected_meta_2d <- read_csv("FirstSeqMeta2d/JTKresult_WT_minus2_plus2_genes_TMM_EXPR_mergeRep_selected.csv")
+FL_minus2_plus2_genes_TMM_EXPR_mergeRep_selected_meta_2d <- read_csv("FirstSeqMeta2d/JTKresult_FL_minus2_plus2_genes_TMM_EXPR_mergeRep_selected.csv")
+
+WT_minus2_plus2_circa_genes_meta_2d <- WT_minus2_plus2_genes_TMM_EXPR_mergeRep_selected_meta_2d %>%
+    filter(ADJ.P < 0.05)
+FL_minus2_plus2_circa_genes_meta_2d <- FL_minus2_plus2_genes_TMM_EXPR_mergeRep_selected_meta_2d %>%
+    filter(ADJ.P < 0.05)
+
+WT_FL_minus2_plus2_circa_genes <- intersect(
+    WT_minus2_plus2_circa_genes_meta_2d$CycID,
+    FL_minus2_plus2_circa_genes_meta_2d$CycID
+)
+writeLines(WT_FL_minus2_plus2_circa_genes, "mediumDataSave/firstSeqExp/WT_FL_minus2_plus2_circa_genes.txt")
