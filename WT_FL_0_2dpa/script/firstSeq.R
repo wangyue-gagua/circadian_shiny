@@ -67,9 +67,9 @@ WT_FL_minus2_plus2_day_cytokinRelatedGeneScaledPlot <- WT_FL_minus2_plus2_day_cy
     # facet_wrap(~replicate, nrow = 2) +
     geom_rect(
         data = data.frame(
-                    xstart = seq(-36, 36, 24),
-                    xend = seq(-24, 48, 24)
-                ),
+            xstart = seq(-36, 36, 24),
+            xend = seq(-24, 48, 24)
+        ),
         aes(
             xmin = xstart,
             xmax = xend,
@@ -108,9 +108,9 @@ WT_FL_minus2_plus2_day_abaRelatedGeneScaledPlot <- WT_FL_minus2_plus2_day_abaRel
     # facet_wrap(~replicate, nrow = 2) +
     geom_rect(
         data = data.frame(
-                    xstart = seq(-36, 36, 24),
-                    xend = seq(-24, 48, 24)
-                ),
+            xstart = seq(-36, 36, 24),
+            xend = seq(-24, 48, 24)
+        ),
         aes(
             xmin = xstart,
             xmax = xend,
@@ -149,9 +149,9 @@ WT_FL_minus2_plus2_day_jasmonateRelatedGeneScaledPlot <- WT_FL_minus2_plus2_day_
     # facet_wrap(~replicate, nrow = 2) +
     geom_rect(
         data = data.frame(
-                    xstart = seq(-36, 36, 24),
-                    xend = seq(-24, 48, 24)
-                ),
+            xstart = seq(-36, 36, 24),
+            xend = seq(-24, 48, 24)
+        ),
         aes(
             xmin = xstart,
             xmax = xend,
@@ -190,9 +190,9 @@ WT_FL_minus2_plus2_day_gibberellinRelatedGeneScaledPlot <- WT_FL_minus2_plus2_da
     # facet_wrap(~replicate, nrow = 2) +
     geom_rect(
         data = data.frame(
-                    xstart = seq(-36, 36, 24),
-                    xend = seq(-24, 48, 24)
-                ),
+            xstart = seq(-36, 36, 24),
+            xend = seq(-24, 48, 24)
+        ),
         aes(
             xmin = xstart,
             xmax = xend,
@@ -211,3 +211,39 @@ WT_FL_minus2_plus2_day_gibberellinRelatedGeneScaledPlot <- WT_FL_minus2_plus2_da
     ) +
     theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1))
 ggsave("figure/geneRepCirca/WT_FL_minus2_plus2_day_gibberellinRelatedGeneScaledPlot.pdf", WT_FL_minus2_plus2_day_gibberellinRelatedGeneScaledPlot, width = 10, height = 10)
+
+# 用计算WT FL spearman相关系数的方法寻找差异基因
+# 还是仅采取强节律基因
+WT_FL_minus2_plus2_circa_genes <- readLines("mediumDataSave/firstSeqExp/WT_FL_minus2_plus2_circa_genes.txt")
+
+WT_FL_minus2_plus2_circa_genes_TMM_sample_exp <- WT_FL_minus2_plus2_day_TMM_sample_exp %>%
+    dplyr::select(c(1:6, {{ WT_FL_minus2_plus2_circa_genes }}))
+
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR <- WT_FL_minus2_plus2_day_genes_TMM_EXPR[WT_FL_minus2_plus2_circa_genes, ]
+
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor <- WT_FL_minus2_plus2_circa_genes_TMM_EXPR %>% 
+    rownames_to_column("geneId") %>% 
+    rowwise() %>% 
+    mutate(spearman_cor = cor.test(
+        c_across(contains("WT")),
+        c_across(contains("FL")),
+        method = "spearman"
+    )$estimate)
+
+## 保存相关系数临时文件
+# write_csv(WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor, "mediumDataSave/firstSeqExp/WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor.csv")
+## 提取WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor$spearman_cor的四分位
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor_quantile <- quantile(WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor$spearman_cor, probs = c(0.25, 0.75))
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor_quantile
+
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor %>% filter(
+    spearman_cor == max(WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor$spearman_cor)
+) %>% pull(geneId)
+
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor %>% filter(
+    spearman_cor == min(WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor$spearman_cor)
+) %>% pull(geneId)
+
+WT_FL_minus2_plus2_circa_genes_TMM_EXPR_rev_genes <- WT_FL_minus2_plus2_circa_genes_TMM_EXPR_cor %>% 
+    filter(spearman_cor < 0) %>% 
+    pull(geneId)
