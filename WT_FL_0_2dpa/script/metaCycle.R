@@ -516,11 +516,10 @@ FL_WT_meta2d_circa <- read_tsv("FL_WT_meta2d_circa.tsv")
 FL_WT_meta2d_circa %>% filter(abs(phaseDiff) > 8) # 相位差最大的两个基因 Ghir_D11G030190 Ghir_A10G017040
 # 统计相位差异分布
 phaseDiffTable <- tibble(
-  PhaseDiff = c("<1", "1 ~ 4", "4 ~ 8", "8 ~ 12"),
+  PhaseDiff = c("<1", "1 ~ 8", "8 ~ 12"),
   nums = c(
     sum(abs(FL_WT_meta2d_circa$phaseDiff) < 1),
-    sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 1 & abs(FL_WT_meta2d_circa$phaseDiff) < 4),
-    sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 4 & abs(FL_WT_meta2d_circa$phaseDiff) < 8),
+    sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 1 & abs(FL_WT_meta2d_circa$phaseDiff) < 8),
     sum(abs(FL_WT_meta2d_circa$phaseDiff) >= 8 & abs(FL_WT_meta2d_circa$phaseDiff) < 12)
   ),
 )
@@ -533,7 +532,7 @@ ggplot(phaseDiffTable, aes(x = "Content", y = nums, fill = PhaseDiff)) +
   labs(x = "", y = "", title = "相位差异分布 N = 1149") +
   theme(axis.text = element_blank()) +
   theme(panel.grid = element_blank())
-
+ggsave("figure/phaseDiffDistribution.png")
 
 ## plot
 source("script/plotFunctionUtil.R")
