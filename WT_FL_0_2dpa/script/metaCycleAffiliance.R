@@ -38,7 +38,7 @@ second_detected_geneCnt <- second_count_matrix_withMeanAndSd %>%
     filter(means > 10) %>% 
     pull(Geneid)
 
-WT_FL_both_uncirca_detected_genes <- intersect(WT_FL_both_uncirca_genes, second_detected_geneCnt)
+WT_FL_both_uncirca_detected_genes <- intersect(WT_FL_both_uncirca_genes, second_detected_geneCnt) # N = 5429
 
 second_count_matrix_WT_FL_both_uncirca_detected_genes <- second_count_matrix %>% 
     filter(Geneid %in% WT_FL_both_uncirca_detected_genes) %>% 
@@ -58,7 +58,7 @@ pheatmap(
 
 firstSeqAnyUncircaGenes <- readLines("mediumDataSave/firstSeqExp/anyUncircaGenes.txt")
 
-firstSecondAnyUnCirca <- intersect(firstSeqAnyUncircaGenes, WT_FL_both_uncirca_detected_genes)
+firstSecondAnyUnCirca <- intersect(firstSeqAnyUncircaGenes, WT_FL_both_uncirca_detected_genes) # N = 208
 # 保存基因列表至临时文件
 # writeLines(firstSecondAnyUnCirca, "mediumDataSave/firstSecondAnyUnCirca.txt")
 firstSecond_count_matrix_WT_FL_both_uncirca_detected_genes <- second_count_matrix %>% 
