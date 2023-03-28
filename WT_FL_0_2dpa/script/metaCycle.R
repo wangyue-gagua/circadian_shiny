@@ -569,3 +569,46 @@ PRR9 <- my_grid_plot_WT_FL_0_2dpa(
   "PRR9"
 )
 ggsave("figure/my_cir_plot_WT_FL_0_2dpa/Ghir_A11G010900_Ghir_D11G010820_PRR9.pdf", PRR9)
+
+
+
+# 尝试取一个周期内6个时间点进行metacycle分析。
+WT_0_2day_genes_TMM_EXPR_mergeRep_selected <- read_csv("WT_0_2day_genes_TMM_EXPR_mergeRep_selected.csv")
+WT_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period <- WT_0_2day_genes_TMM_EXPR_mergeRep_selected %>% 
+  select(1:7)
+FL_0_2day_genes_TMM_EXPR_mergeRep_selected <- read_csv("FL_0_2day_genes_TMM_EXPR_mergeRep_selected.csv")
+FL_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period <- FL_0_2day_genes_TMM_EXPR_mergeRep_selected %>% 
+  select(1:7)
+## 写入文件
+write_csv(WT_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period, "mediumDataSave/metacycleRaw/WT_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period.csv")
+write_csv(FL_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period, "mediumDataSave/metacycleRaw/FL_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period.csv")
+library(MetaCycle)
+meta2d(
+  infile = "mediumDataSave/metacycleRaw/WT_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period.csv",
+  filestyle = "csv",
+  timepoints = seq(1, 21, 4),
+  outdir = "WT_0_2day_1Period_meta2d",
+  parallelize = TRUE,
+  nCores = 10,
+  minper = 24,
+  maxper = 24,
+  ARSdefaultPer = 24,
+  cycMethod = "JTK",
+)
+
+meta2d(
+  infile = "mediumDataSave/metacycleRaw/FL_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period.csv",
+  filestyle = "csv",
+  timepoints = seq(1, 21, 4),
+  outdir = "FL_0_2day_1Period_meta2d",
+  parallelize = TRUE,
+  nCores = 10,
+  minper = 24,
+  maxper = 24,
+  ARSdefaultPer = 24,
+  cycMethod = "JTK",
+)
+
+## 读取结果
+WT_0_2day_1Period_meta2d <- read_csv("WT_0_2day_1Period_meta2d/JTKresult_WT_0_2day_genes_TMM_EXPR_mergeRep_selected_1Period.csv")
+head(WT_0_2day_1Period_meta2d)
