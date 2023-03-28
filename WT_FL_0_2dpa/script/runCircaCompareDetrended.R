@@ -31,23 +31,17 @@ for (i in seq(1, length(FL_WT_meta2d_circa$CycID))) {
     col_group = "strain",
     col_outcome = "measure",
     col_id = "replicate",
-    control = list(grouped_params = c("k", "alpha", "phi"), random_params = c("phi1")),
+    control = list(grouped_params = c("alpha", "phi"), random_params = c("phi1")), # k即mesor，因为detrend后mesor恒为1，故会导致模型不收敛，故不考虑k
     period = 24
   )
   if(is.null(outDf)) {
     next
   }
-  messorDiff <- outDf$summary %>%
-    filter(parameter == "Mesor difference estimate") %>%
-    pull(value)
   amplitudeDiff <- outDf$summary %>%
     filter(parameter == "Amplitude difference estimate") %>%
     pull(value)
   phaseDiff <- outDf$summary %>%
     filter(parameter == "Phase difference estimate") %>%
-    pull(value)
-  messorDiffPvalue <- outDf$summary %>%
-    filter(parameter == "P-value for mesor difference") %>%
     pull(value)
   amplitudeDiffPvalue <- outDf$summary %>%
     filter(parameter == "P-value for amplitude difference") %>%
@@ -55,10 +49,8 @@ for (i in seq(1, length(FL_WT_meta2d_circa$CycID))) {
   phaseDiffPvalue <- outDf$summary %>%
     filter(parameter == "P-value for difference in phase") %>%
     pull(value)
-  FL_WT_meta2d_circa$messorDiff[[i]] <- messorDiff
   FL_WT_meta2d_circa$amplitudeDiff[[i]] <- amplitudeDiff
   FL_WT_meta2d_circa$phaseDiff[[i]] <- phaseDiff
-  FL_WT_meta2d_circa$messorDiffPvalue[[i]] <- messorDiffPvalue
   FL_WT_meta2d_circa$amplitudeDiffPvalue[[i]] <- amplitudeDiffPvalue
   FL_WT_meta2d_circa$phaseDiffPvalue[[i]] <- phaseDiffPvalue
   print(i)
